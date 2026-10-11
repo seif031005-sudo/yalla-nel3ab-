@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>موقع المطور seif - 150 لعبة</title>
+<title>موقع المطور seif</title>
 <style>
 *{box-sizing:border-box} body{background:#0a0e1c;color:#fff;font-family:sans-serif;margin:0}
 .top{background:#151b2e;text-align:center;padding:16px;font-weight:bold;border-bottom:2px solid #5865f2;font-size:18px}
@@ -31,81 +31,69 @@
 .userBadge{background:#222b45;padding:8px 14px;border-radius:20px;font-size:13px;border:1px solid #5865f2}
 #privateBox{position:fixed;bottom:0;right:10px;width:340px;height:400px;background:#151b2e;border:2px solid #5865f2;border-radius:15px 15px 0 0;display:none;flex-direction:column;z-index:1000}
 .gamesGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:12px}
-.gameCard{background:#151b2e;border-radius:16px;overflow:hidden;border:1px solid #1e2742;cursor:pointer;text-align:center;padding-bottom:10px}
-.gameCard img{width:100%;height:95px;object-fit:cover;background:#0f1424}
-.gameCard:hover{border-color:#5865f2;transform:scale(1.02)}
+.gameCard{background:#151b2e;border-radius:16px;overflow:hidden;border:1px solid #1e2742;cursor:pointer;text-align:center;padding:8px}
+.gameCard img{width:100%;height:85px;object-fit:cover;background:#0f1424;border-radius:10px}
+.gameCard:hover{border-color:#5865f2}
 </style>
 </head>
 <body>
 <div class="top">مرحبا في موقع المطور seif</div>
 <div id="loginModal" class="modal active"><div class="box" style="text-align:center"><h2>🎮 اهلا بيك!</h2><input id="loginInput" placeholder="يوزر نيم انجليزي" maxlength="15"><button class="btn-full" onclick="doLogin()">دخول 🚀</button><p id="loginMsg" style="color:#ff3b5c"></p></div></div>
-
 <div class="tabs">
 <div onclick="openTab('friends')" id="tb-friends">👥 اصدقاء</div>
 <div onclick="openTab('chat')" id="tb-chat">💬 دردشة</div>
 <div onclick="openTab('rooms')" id="tb-rooms">🎮 رومات 15</div>
 <div onclick="openTab('games')" id="tb-games" class="active">🕹️ 150 لعبة</div>
 </div>
-
 <div id="sec-games" class="section active-sec">
-<div style="padding:10px;display:flex;justify-content:space-between"><span class="userBadge" id="showUser"></span><span class="userBadge" id="gamesCount">150 لعبة</span></div>
-<div class="searchBox"><input id="q" onkeyup="renderGames()" placeholder="🔍 ابحث عن لعبة من 150..."></div>
+<div style="padding:10px;display:flex;justify-content:space-between"><span class="userBadge" id="showUser"></span><span class="userBadge" id="gamesCount"></span></div>
+<div class="searchBox"><input id="q" type="text" placeholder="🔍 ابحث مثلا blood او pubg..."></div>
 <div id="gamesList" class="gamesGrid"></div>
 </div>
-
 <div id="sec-rooms" class="section"><div style="padding:10px"><button class="btn-full" onclick="openForm()">+ اعمل روم - 15/15</button></div><div id="roomsList"></div></div>
 <div id="sec-chat" class="section"><div id="chatList" class="chatBox"></div><div class="chatInput"><input id="chatText" placeholder="اكتب في العام..."><button class="btn" onclick="sendChat()">ارسال</button></div></div>
 <div id="sec-friends" class="section"><div class="friendBox"><p>انت: <b id="myNameShow" style="color:#5865f2"></b></p><input id="friendSearch" placeholder="يوزر صاحبك"><button class="btn-full" onclick="sendFriendReq()">ابعت طلب ✅</button><div style="display:flex;gap:8px;margin-top:15px"><button class="btn" style="flex:1;background:#222b45" onclick="showFriendsTab('in')">📩 جايلك</button><button class="btn" style="flex:1;background:#222b45" onclick="showFriendsTab('out')">📤 بعته</button><button class="btn" style="flex:1;background:#5865f2" onclick="showFriendsTab('friends')">✅ خاص</button></div><div id="friendsResult" style="margin-top:15px;text-align:right"></div></div></div>
-
 <div id="modal" class="modal"><div class="box"><h3 style="text-align:center">🎮 روم جديد 15/15</h3><select id="f-game"></select><input type="number" id="f-count" value="15" min="2" max="15"><textarea id="f-desc" placeholder="الوصف"></textarea><input id="f-link" placeholder="لينك"><div style="display:flex;gap:10px"><button class="btn" style="flex:1" onclick="saveRoom()">انشاء</button><button class="btn-del" style="flex:1" onclick="closeForm()">الغاء</button></div></div></div>
 <div id="privateBox"><div style="background:#5865f2;padding:10px;display:flex;justify-content:space-between"><span id="privateWith"></span><span onclick="closePrivate()" style="cursor:pointer">X</span></div><div id="privateMsgs" style="flex:1;overflow:auto;padding:10px;display:flex;flex-direction:column;gap:6px"></div><div style="display:flex;gap:5px;padding:8px"><input id="privateText" style="flex:1;padding:10px;background:#0f1424;border:1px solid #222b45;color:#fff;border-radius:10px" placeholder="خاص..."><button class="btn" onclick="sendPrivate()">➤</button></div></div>
-
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getDatabase, ref, onValue, runTransaction, push, set, get, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 const firebaseConfig = { apiKey: "AIzaSyD9Yeq09obz4WjBrJXvFxPjP8IkdbuDt4E", authDomain: "gaming-rooms.firebaseapp.com", databaseURL: "https://gaming-rooms-default-rtdb.firebaseio.com", projectId: "gaming-rooms", storageBucket: "gaming-rooms.firebasestorage.app", messagingSenderId: "325249771955", appId: "1:325249771955:web:1e3e89b4f84891fd6403c6" };
 const app=initializeApp(firebaseConfig); const db=getDatabase(app);
 let myUsername=localStorage.getItem("myUsername");
-const allGames=["Blood Strike","PUBG Mobile","Free Fire","Call of Duty Mobile","Fortnite","Valorant Mobile","Minecraft","Roblox","FIFA 24","eFootball 26","Asphalt 9","8 Ball Pool","Among Us","Brawl Stars","Clash of Clans","Mobile Legends","XO","Ludo","Domino","Chess","Free Fire Max","PUBG Lite","COD Warzone","Warzone Mobile","Farlight 84","Knives Out","Rules of Survival","Pixel Gun","Standoff 2","Critical Ops","Modern Strike","MaskGun","Battle Prime","Shadowgun","Dead Trigger 2","Into the Dead 2","Sniper 3D","Cover Fire","World War Heroes","World of Tanks","War Thunder","Carrom","Air Hockey","Bowling King","Tennis Clash","Basketball Stars","Boxing Stars","Shadow Fight 2","Shadow Fight 3","Shadow Fight 4","Injustice 2","Mortal Kombat","Street Fighter","Tekken","Dragon Ball Legends","Naruto X Boruto","One Piece","Sonic Dash","Mario Run","Pac-Man","Tetris","Snake","Ludo Star","Yalla Ludo","Top War","State of Survival","Rise of Kingdoms","Lords Mobile","Arena of Valor","Pokemon Unite","Brawlhalla","GTA 5","Red Dead 2","God of War","Spider-Man 2","The Last of Us","Cyberpunk","Assassins Creed","Hitman 3","Forza Horizon 5","Need for Speed","CarX Drift","Drift Max Pro","Bus Simulator","Truck Simulator","Subway Surfers","Temple Run","Candy Crush","Football Master","Dream League","Score Hero","Worms Zone","Slither.io","Agar.io","Paper.io","Craftsman","Block Craft","Mini World","Toca Boca","My Talking Tom","Pou","Cut the Rope","Angry Birds","Plants vs Zombies","Zombie Tsunami","Last Day on Earth","Guns of Boom","Shadow Fight Arena","MARVEL Super War","Clash Royale","Clash Mini","Hay Day","Boom Beach","FIFA Mobile","FC Mobile","Dream League 24","Top Eleven","eFootball 2024","Car Parking","Extreme Car Driving","Real Racing 3","Hill Climb Racing","Traffic Rider","MotoGP","WWE Mayhem","UFC Mobile","EA Sports UFC","Real Boxing 2","Badminton League","Volleyball","Baseball 9","Table Tennis","Darts","Snooker","Chess Online","Checkers","Backgammon","Solitaire","Uno","Hearts","Spades","Rummy","Ludo Supreme","Dominoes","Poker","Blackjack","Ludo King","Carrom Pool","8 Ball Pool 2","Mini Militia","Worms 2","Bowmasters","Archery King","Tanks A Lot","War Robots","Mech Arena","Rocket League Sideswipe","Stumble Guys","Fall Guys Mobile","Eggy Party","Super Sus","Goose Goose Duck","Town of Salem","Werewolf Online","Ludo Party","Parchisi Star","Call of Duty Warzone","Valorant","League of Legends","Apex Legends","Overwatch 2","Far Cry 6","Gran Turismo","F1 Mobile"];
-const gameImages = {
-"BLOOD STRIKE":"https://play-lh.googleusercontent.com/5Aia2oVv6pupv2y-Rh19rZ2r1v3p2c5g0j9f7v8w=s200",
-"PUBG MOBILE":"https://play-lh.googleusercontent.com/JRd05pyBH41qjgsJuWduRJpDeZG0Hnb0yjf2nWqO7VaGKL10-G5UIygxED-WNOc9Fa8=s200",
-"FREE FIRE":"https://play-lh.googleusercontent.com/3a2pA2Qw2i2i3i4i5i6i7i8i9j0k=s200",
-"CALL OF DUTY MOBILE":"https://play-lh.googleusercontent.com/E6q5ziCMZ7u2Zz2y2y2y2y2y=s200"
-};
-function getGameImage(name){
-  const slug = name.toLowerCase().replace(/[^a-z0-9]/g,'');
-  return `https://cdn.akamai.steamstatic.com/steam/apps/570/header.jpg`.replace('570', Math.abs(slug.split('').reduce((a,b)=>a+b.charCodeAt(0),0))%2000 + 10) + `?text=${encodeURIComponent(name)}` 
-  || `https://via.placeholder.com/200x95/0f1424/5865f2?text=${encodeURIComponent(name)}`;
-}
+const allGames=["Blood Strike","PUBG Mobile","Free Fire","Call of Duty Mobile","Fortnite","Valorant Mobile","Minecraft","Roblox","FIFA 24","eFootball 26","Asphalt 9","8 Ball Pool","Among Us","Brawl Stars","Clash of Clans","Mobile Legends","XO","Ludo","Domino","Chess","Free Fire Max","PUBG Lite","COD Warzone","Warzone Mobile","Farlight 84","Knives Out","Rules of Survival","Pixel Gun","Standoff 2","Critical Ops","Modern Strike","MaskGun","Battle Prime","Shadowgun","Dead Trigger 2","Into the Dead 2","Sniper 3D","Cover Fire","World War Heroes","World of Tanks","War Thunder","Carrom","Air Hockey","Bowling King","Tennis Clash","Basketball Stars","Boxing Stars","Shadow Fight 2","Shadow Fight 3","Shadow Fight 4","Injustice 2","Mortal Kombat","Street Fighter","Tekken","Dragon Ball Legends","Naruto X Boruto","One Piece","Sonic Dash","Mario Run","Pac-Man","Tetris","Snake","Ludo Star","Yalla Ludo","Top War","State of Survival","Rise of Kingdoms","Lords Mobile","Arena of Valor","Pokemon Unite","Brawlhalla","GTA 5","Red Dead 2","God of War","Spider-Man 2","The Last of Us","Cyberpunk","Assassins Creed","Hitman 3","Forza Horizon 5","Need for Speed","CarX Drift","Drift Max Pro","Bus Simulator","Truck Simulator","Subway Surfers","Temple Run","Candy Crush","Football Master","Dream League","Score Hero","Worms Zone","Slither.io","Agar.io","Paper.io","Craftsman","Block Craft","Mini World","Toca Boca","My Talking Tom","Pou","Cut the Rope","Angry Birds","Plants vs Zombies","Zombie Tsunami","Last Day on Earth","Guns of Boom","Shadow Fight Arena","MARVEL Super War","Clash Royale","Clash Mini","Hay Day","Boom Beach","FIFA Mobile","FC Mobile","Dream League 24","Top Eleven","eFootball 2024","Car Parking","Extreme Car Driving","Real Racing 3","Hill Climb Racing","Traffic Rider","MotoGP","WWE Mayhem","UFC Mobile","EA Sports UFC","Real Boxing 2","Badminton League","Volleyball","Baseball 9","Table Tennis","Darts","Snooker","Chess Online","Checkers","Backgammon","Solitaire","Uno","Hearts","Spades","Rummy","Ludo Supreme","Dominoes","Poker","Blackjack","Ludo King","Carrom Pool","8 Ball Pool 2","Mini Militia","Worms 2","Bowmasters","Archery King","Tanks A Lot","War Robots","Mech Arena","Rocket League Sideswipe","Stumble Guys","Fall Guys Mobile","Eggy Party","Super Sus","Goose Goose Duck","Town of Salem","Werewolf Online","Ludo Party","Parchisi Star"];
 let rooms=[];
-const gl=document.getElementById('gamesList'); const sel=document.getElementById('f-game');
+const gl=document.getElementById('gamesList');
+const sel=document.getElementById('f-game');
 allGames.forEach(g=>sel.innerHTML+=`<option>${g}</option>`);
 
-// دي بس اللي اتصلحت - البحث
 function renderGames(){
-  const q=document.getElementById('q').value.toLowerCase().trim();
-  gl.innerHTML="";
-  let filtered=allGames.filter(g=>g.toLowerCase().includes(q));
-  document.getElementById('gamesCount').innerText=filtered.length+' لعبة';
-  if(filtered.length===0){
-    gl.innerHTML=`<div style="grid-column:span 2;text-align:center;padding:30px;color:#8a90a8">مفيش لعبة اسمها "${q}"</div>`;
+  const searchInput = document.getElementById('q');
+  const q = searchInput.value.toLowerCase().trim();
+  gl.innerHTML = "";
+  const filtered = allGames.filter(game => game.toLowerCase().includes(q));
+  document.getElementById('gamesCount').innerText = filtered.length + ' لعبة';
+  if(filtered.length === 0){
+    gl.innerHTML = `<div style="grid-column: span 2;text-align:center;padding:30px;color:#8a90a8">مفيش لعبة اسمها "${q}"</div>`;
     return;
   }
   filtered.forEach(g=>{
-    gl.innerHTML+=`<div class="gameCard" onclick="showRoomsForGame('${g.replace(/'/g,"")}')">
-    <img src="https://via.placeholder.com/300x95/151b2e/5865f2?text=${encodeURIComponent(g)}" alt="${g}">
-    <div style="margin-top:8px;font-size:13px;font-weight:bold">${g}</div>
-    <button class="btn" style="margin-top:8px;padding:6px 18px;font-size:12px">رومات</button>
+    const safe = g.replace(/'/g,"\\'");
+    gl.innerHTML += `
+    <div class="gameCard" onclick="showRoomsForGame('${safe}')">
+      <div style="width:100%;height:85px;background:#0f1424;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:16px;color:#5865f2;border:1px solid #222b45">${g}</div>
+      <div style="margin-top:8px;font-size:13px;font-weight:bold">${g}</div>
+      <button class="btn" style="margin-top:8px;padding:6px 18px;font-size:12px">رومات</button>
     </div>`;
   });
 }
+
+document.getElementById('q').addEventListener('input', renderGames);
 renderGames();
 
 async function checkLogin(){ if(myUsername){document.getElementById('loginModal').classList.remove('active'); document.getElementById('showUser').innerText='👤 '+myUsername; document.getElementById('myNameShow').innerText=myUsername; document.getElementById('topUser').innerText='مرحبا في موقع المطور '+myUsername;} else {document.getElementById('topUser').innerText='مرحبا في موقع المطور seif';} } checkLogin();
 window.doLogin=async function(){let name=document.getElementById('loginInput').value.trim().toLowerCase(); if(name.length<3){document.getElementById('loginMsg').innerText='قصير';return} const snap=await get(ref(db,'usernames/'+name)); if(snap.exists() && snap.val()!==localStorage.getItem('myDeviceId')){document.getElementById('loginMsg').innerText='متاخد';return} let d=localStorage.getItem('myDeviceId')||Date.now()+''+Math.random(); localStorage.setItem('myDeviceId',d); await set(ref(db,'usernames/'+name),d); myUsername=name; localStorage.setItem('myUsername',myUsername); checkLogin();}
 function roomHTML(r){const full=r.joined>=r.max; return `<div class="room ${full?'full':''}"><div style="display:flex;justify-content:space-between;width:100%"><div style="text-align:right"><b>${r.game} <span class="countBadge">${r.joined}/${r.max}</span></b> ${full?'🔒 مقفول 15/15':'🟢 فاضي'}<br><small>صاحبها: ${r.owner}</small><p style="color:#8a90a8;font-size:12px">${r.desc||''}</p>${r.link?`<a href="${r.link}" target="_blank" style="color:#5865f2">🔗 لينك</a>`:''}</div><div style="display:flex;flex-direction:column;gap:6px"><button class="btn" ${full?'disabled':''} onclick="joinRoom('${r._id}')">${r.joinedBy&&r.joinedBy[myUsername]?'خروج':'دخول'}</button>${r.owner===myUsername?`<button class="btn-del" onclick="deleteRoom('${r._id}')">🗑️</button>`:''}</div></div></div>`;}
-window.doSearch=renderGames;
 window.showRoomsForGame=function(g){openTab('rooms'); let f=rooms.filter(r=>r.game===g); document.getElementById('roomsList').innerHTML=f.length?f.map(roomHTML).join(''):`<div style="text-align:center;padding:30px;color:#8a90a8">مفيش رومات لـ ${g}<br><button class="btn" style="margin-top:10px" onclick="openForm()">اعمل اول روم</button></div>`;}
 window.openTab=function(n){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active-sec')); document.querySelectorAll('.tabs div').forEach(t=>t.classList.remove('active')); document.getElementById('sec-'+n).classList.add('active-sec'); document.getElementById('tb-'+n).classList.add('active'); if(n==='friends') showFriendsTab('friends');}
 window.openForm=function(){document.getElementById('modal').classList.add('active');}
