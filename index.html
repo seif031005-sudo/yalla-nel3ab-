@@ -8,7 +8,7 @@
 *{box-sizing:border-box}
 body{background:#0a0e1c;color:#fff;font-family:sans-serif;margin:0}
 .top{background:#151b2e;text-align:center;padding:16px;font-weight:bold;border-bottom:2px solid #5865f2;font-size:18px}
-.tabs{display:flex;justify-content:space-around;background:#151b2e;padding:8px 0;position:sticky;top:0;z-index:50}
+.tabs{display:flex;justify-content:space-around;background:#151b2e;padding:8px 0;position:sticky;top:0;z-index:50;flex-wrap:wrap;gap:4px}
 .tabs div{padding:12px 10px;cursor:pointer;color:#7a8194;border-radius:10px;font-size:14px}
 .tabs div.active{color:#fff;background:#222b45}
 .searchBox{background:#151b2e;margin:15px;border-radius:14px;padding:4px}
@@ -39,7 +39,7 @@ body{background:#0a0e1c;color:#fff;font-family:sans-serif;margin:0}
 .gameCard img{width:100%;height:85px;object-fit:cover;background:#0f1424;border-radius:10px}
 .gameCard:hover{border-color:#5865f2}
 @media(max-width:480px){
-.tabs div{font-size:12px;padding:10px 6px}
+.tabs div{font-size:11px;padding:10px 6px}
 .room{margin:8px;padding:10px}
 }
 </style>
@@ -62,6 +62,8 @@ body{background:#0a0e1c;color:#fff;font-family:sans-serif;margin:0}
   <div onclick="openTab('chat')" id="tb-chat">💬 دردشة</div>
   <div onclick="openTab('rooms')" id="tb-rooms">🎮 رومات 15</div>
   <div onclick="openTab('games')" id="tb-games" class="active">🕹️ 150 لعبة</div>
+  <div onclick="openTab('privacy')" id="tb-privacy">🔒 الخصوصية</div>
+  <div onclick="openTab('support')" id="tb-support">📞 الدعم</div>
 </div>
 
 <div id="sec-games" class="section active-sec">
@@ -104,6 +106,40 @@ body{background:#0a0e1c;color:#fff;font-family:sans-serif;margin:0}
   </div>
 </div>
 
+<!-- الجديد: سياسة الخصوصية -->
+<div id="sec-privacy" class="section">
+  <div class="friendBox" style="text-align:right;line-height:1.9">
+    <h3>🔒 سياسة الخصوصية</h3>
+    <p style="color:#8a90a8">الملف الرسمي اللي انت رافعه في جيت هب هو ده:</p>
+    <button class="btn-full" onclick="window.open('privacy.html','_blank')">📄 فتح privacy.html</button>
+    <div style="background:#0f1424;padding:12px;border-radius:10px;border:1px solid #222b45;margin-top:15px;text-align:right;font-size:13px">
+      <p>✅ بنجمع اليوزر نيم فقط ورسائل الشات لتشغيل الموقع.</p>
+      <p>✅ البيانات محفوظة في Firebase.</p>
+      <p>✅ ممكن تطلب حذف حسابك عن طريق الدعم.</p>
+      <p style="margin-top:10px">للاستفسار: <b style="color:#fff">+977 976-2956184</b></p>
+    </div>
+  </div>
+</div>
+
+<!-- الجديد: تواصل مع الدعم مربوط بالرقم -->
+<div id="sec-support" class="section">
+  <div class="friendBox">
+    <h3>📞 تواصل مع الدعم</h3>
+    <p style="color:#8a90a8;margin:10px 0">رقم الدعم اللي في الصورة</p>
+    <h2 style="color:#00ff88;direction:ltr">+977 976-2956184</h2>
+    <a href="tel:+9779762956184" style="text-decoration:none">
+      <button class="btn-full" style="background:#00c853">📞 اتصال مباشر</button>
+    </a>
+    <a href="https://wa.me/9779762956184?text=السلام%20عليكم%20محتاج%20مساعدة%20في%20موقع%20yalla-nel3ab" target="_blank" style="text-decoration:none">
+      <button class="btn-full" style="background:#25D366">💬 واتساب مباشر</button>
+    </a>
+    <div style="margin-top:15px;background:#0f1424;padding:12px;border-radius:10px;border:1px solid #222b45">
+      <small style="color:#8a90a8">دوس على الزرار وهيفتح الاتصال او الواتساب على نفس الرقم اللي في الصورة<br><br>
+      <span onclick="window.open('privacy.html','_blank')" style="color:#5865f2;cursor:pointer">📄 سياسة الخصوصية</span></small>
+    </div>
+  </div>
+</div>
+
 <div id="modal" class="modal">
   <div class="box">
     <h3 style="text-align:center">🎮 روم جديد 15/15</h3>
@@ -128,6 +164,13 @@ body{background:#0a0e1c;color:#fff;font-family:sans-serif;margin:0}
     <input id="privateText" style="flex:1;padding:10px;background:#0f1424;border:1px solid #222b45;color:#fff;border-radius:10px" placeholder="خاص..." maxlength="2000">
     <button class="btn" onclick="sendPrivate()">➤</button>
   </div>
+</div>
+
+<div style="text-align:center;padding:18px;color:#7a8194;font-size:11px;border-top:1px solid #1e2742;margin-top:10px">
+  <span onclick="window.open('privacy.html','_blank')" style="cursor:pointer;color:#5865f2">سياسة الخصوصية</span> |
+  <a href="tel:+9779762956184" style="color:#5865f2;text-decoration:none">+977 976-2956184</a> |
+  <span onclick="openTab('support')" style="cursor:pointer;color:#5865f2">الدعم</span>
+  <p style="margin-top:8px">© 2026 موقع المطور seif</p>
 </div>
 
 <script type="module">
@@ -196,7 +239,7 @@ const allGames = [
 ];
 
 function escapeHTML(value) {
-  return String(value ?? "").replace(/[&<>"']/g, ch => ({
+  return String(value?? "").replace(/[&<>"']/g, ch => ({
     "&": "&amp;",
     "<": "&lt;",
     ">": "&gt;",
@@ -235,47 +278,29 @@ allGames.forEach(game => {
 function renderGames() {
   const q = document.getElementById("q").value.toLowerCase().trim();
   gl.replaceChildren();
-
-  const filtered = allGames.filter(game =>
-    game.toLowerCase().includes(q)
-  );
-
-  document.getElementById("gamesCount").textContent =
-    filtered.length + " لعبة";
-
+  const filtered = allGames.filter(game => game.toLowerCase().includes(q));
+  document.getElementById("gamesCount").textContent = filtered.length + " لعبة";
   if (!filtered.length) {
     const empty = document.createElement("div");
-    empty.style.cssText =
-      "grid-column:span 2;text-align:center;padding:30px;color:#8a90a8";
+    empty.style.cssText = "grid-column:span 2;text-align:center;padding:30px;color:#8a90a8";
     empty.textContent = `مفيش لعبة اسمها "${q}"`;
     gl.appendChild(empty);
     return;
   }
-
   filtered.forEach(game => {
     const card = document.createElement("div");
     card.className = "gameCard";
-
     const nameBox = document.createElement("div");
-    nameBox.style.cssText =
-      "width:100%;height:85px;background:#0f1424;border-radius:10px;" +
-      "display:flex;align-items:center;justify-content:center;font-weight:bold;" +
-      "font-size:16px;color:#5865f2;border:1px solid #222b45";
+    nameBox.style.cssText = "width:100%;height:85px;background:#0f1424;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:16px;color:#5865f2;border:1px solid #222b45";
     nameBox.textContent = game;
-
     const label = document.createElement("div");
     label.style.cssText = "margin-top:8px;font-size:13px;font-weight:bold";
     label.textContent = game;
-
     const button = document.createElement("button");
     button.className = "btn";
     button.style.cssText = "margin-top:8px;padding:6px 18px;font-size:12px";
     button.textContent = "رومات";
-    button.addEventListener("click", event => {
-      event.stopPropagation();
-      window.showRoomsForGame(game);
-    });
-
+    button.addEventListener("click", event => { event.stopPropagation(); window.showRoomsForGame(game); });
     card.append(nameBox, label, button);
     card.addEventListener("click", () => window.showRoomsForGame(game));
     gl.appendChild(card);
@@ -288,7 +313,6 @@ renderGames();
 function checkLogin() {
   const modal = document.getElementById("loginModal");
   const top = document.getElementById("topUser");
-
   if (myUsername && validUsername(myUsername)) {
     modal.classList.remove("active");
     document.getElementById("showUser").textContent = "👤 " + myUsername;
@@ -306,42 +330,22 @@ window.doLogin = async function() {
   const input = document.getElementById("loginInput");
   const msg = document.getElementById("loginMsg");
   const name = input.value.trim().toLowerCase();
-
-  if (!validUsername(name)) {
-    msg.textContent = "استخدم 3 إلى 15 حرفًا إنجليزيًا أو رقمًا أو _";
-    return;
-  }
-
+  if (!validUsername(name)) { msg.textContent = "استخدم 3 إلى 15 حرفًا إنجليزيًا أو رقمًا أو _"; return; }
   msg.textContent = "جاري التحقق...";
-
   try {
     let deviceId = localStorage.getItem("myDeviceId");
     if (!deviceId) {
-      deviceId = crypto.randomUUID
-        ? crypto.randomUUID()
-        : Date.now() + "_" + Math.random().toString(36).slice(2);
+      deviceId = crypto.randomUUID? crypto.randomUUID() : Date.now() + "_" + Math.random().toString(36).slice(2);
       localStorage.setItem("myDeviceId", deviceId);
     }
-
     const usernameRef = ref(db, "usernames/" + name);
-    const result = await runTransaction(usernameRef, current => {
-      if (current === null || current === deviceId) return deviceId;
-      return;
-    });
-
-    if (!result.committed) {
-      msg.textContent = "اليوزر ده مستخدم بالفعل";
-      return;
-    }
-
+    const result = await runTransaction(usernameRef, current => { if (current === null || current === deviceId) return deviceId; return; });
+    if (!result.committed) { msg.textContent = "اليوزر ده مستخدم بالفعل"; return; }
     myUsername = name;
     localStorage.setItem("myUsername", name);
     msg.textContent = "";
     checkLogin();
-  } catch (error) {
-    console.error(error);
-    msg.textContent = "حصل خطأ في الاتصال. جرّب تاني";
-  }
+  } catch (error) { console.error(error); msg.textContent = "حصل خطأ في الاتصال. جرّب تاني"; }
 };
 
 function roomHTML(room) {
@@ -353,550 +357,241 @@ function roomHTML(room) {
   const safeGame = escapeHTML(room.game);
   const safeOwner = escapeHTML(room.owner);
   const safeDesc = escapeHTML(room.desc || "");
-  const safeLink = validRoomURL(String(room.link || ""))
-    ? String(room.link || "")
-    : "";
-
+  const safeLink = validRoomURL(String(room.link || ""))? String(room.link || "") : "";
   return `
-    <div class="room ${full ? "full" : ""}">
+    <div class="room ${full? "full" : ""}">
       <div style="display:flex;justify-content:space-between;width:100%">
         <div style="text-align:right">
           <b>${safeGame} <span class="countBadge">${joined}/${max}</span></b>
-          ${full ? "🔒 مقفول" : "🟢 فاضي"}<br>
+          ${full? "🔒 مقفول" : "🟢 فاضي"}<br>
           <small>صاحبها: ${safeOwner}</small>
           <p style="color:#8a90a8;font-size:12px">${safeDesc}</p>
-          ${safeLink
-            ? `<a href="${escapeHTML(safeLink)}" target="_blank" rel="noopener noreferrer" style="color:#5865f2">🔗 لينك</a>`
-            : ""}
+          ${safeLink? `<a href="${escapeHTML(safeLink)}" target="_blank" rel="noopener noreferrer" style="color:#5865f2">🔗 لينك</a>` : ""}
         </div>
         <div style="display:flex;flex-direction:column;gap:6px">
-          <button class="btn" ${full && !isMember ? "disabled" : ""}
-            onclick="joinRoom('${safeId}')">
-            ${isMember ? "خروج" : "دخول"}
-          </button>
-          ${room.owner === myUsername
-            ? `<button class="btn-del" onclick="deleteRoom('${safeId}')">🗑️</button>`
-            : ""}
+          <button class="btn" ${full &&!isMember? "disabled" : ""} onclick="joinRoom('${safeId}')">${isMember? "خروج" : "دخول"}</button>
+          ${room.owner === myUsername? `<button class="btn-del" onclick="deleteRoom('${safeId}')">🗑️</button>` : ""}
         </div>
       </div>
     </div>`;
 }
 
-/* الإصلاح: عرض الرومات حسب اللعبة المختارة حتى مع تحديث Firebase */
 function renderRooms() {
   const target = document.getElementById("roomsList");
-  const list = activeRoomGame
-    ? rooms.filter(room => room.game === activeRoomGame)
-    : rooms;
-
+  const list = activeRoomGame? rooms.filter(room => room.game === activeRoomGame) : rooms;
   if (!list.length) {
     target.replaceChildren();
-
     const message = document.createElement("div");
-    message.style.cssText =
-      "text-align:center;padding:30px;color:#8a90a8";
-
-    message.textContent = activeRoomGame
-      ? "مفيش رومات لـ " + activeRoomGame
-      : "مفيش رومات";
-
+    message.style.cssText = "text-align:center;padding:30px;color:#8a90a8";
+    message.textContent = activeRoomGame? "مفيش رومات لـ " + activeRoomGame : "مفيش رومات";
     if (activeRoomGame) {
       const button = document.createElement("button");
-      button.className = "btn";
-      button.style.marginTop = "10px";
-      button.textContent = "اعمل اول روم";
-      button.onclick = () => {
-        window.openForm();
-        document.getElementById("f-game").value = activeRoomGame;
-      };
-      message.appendChild(document.createElement("br"));
-      message.appendChild(button);
+      button.className = "btn"; button.style.marginTop = "10px"; button.textContent = "اعمل اول روم";
+      button.onclick = () => { window.openForm(); document.getElementById("f-game").value = activeRoomGame; };
+      message.appendChild(document.createElement("br")); message.appendChild(button);
     }
-
-    target.appendChild(message);
-    return;
+    target.appendChild(message); return;
   }
-
   target.innerHTML = list.map(roomHTML).join("");
 }
 
-window.showRoomsForGame = function(game) {
-  activeRoomGame = game;
-  window.openTab("rooms", true);
-  renderRooms();
-};
+window.showRoomsForGame = function(game) { activeRoomGame = game; window.openTab("rooms", true); renderRooms(); };
 
 window.openTab = function(name, keepRoomFilter = false) {
-  document.querySelectorAll(".section").forEach(section =>
-    section.classList.remove("active-sec")
-  );
-  document.querySelectorAll(".tabs div").forEach(tab =>
-    tab.classList.remove("active")
-  );
-
+  document.querySelectorAll(".section").forEach(section => section.classList.remove("active-sec"));
+  document.querySelectorAll(".tabs div").forEach(tab => tab.classList.remove("active"));
   document.getElementById("sec-" + name).classList.add("active-sec");
   document.getElementById("tb-" + name).classList.add("active");
-
   if (name === "friends") window.showFriendsTab("friends");
-
-  if (name === "rooms") {
-    if (!keepRoomFilter) activeRoomGame = null;
-    renderRooms();
-  }
+  if (name === "rooms") { if (!keepRoomFilter) activeRoomGame = null; renderRooms(); }
 };
 
-window.openForm = function() {
-  if (!myUsername) return alert("سجل دخول الأول");
-  document.getElementById("modal").classList.add("active");
-};
-
-window.closeForm = function() {
-  document.getElementById("modal").classList.remove("active");
-};
+window.openForm = function() { if (!myUsername) return alert("سجل دخول الأول"); document.getElementById("modal").classList.add("active"); };
+window.closeForm = function() { document.getElementById("modal").classList.remove("active"); };
 
 onValue(ref(db, "rooms"), snapshot => {
-  rooms = [];
-
-  snapshot.forEach(child => {
-    const room = child.val();
-    if (!room || typeof room !== "object") return;
-    room._id = child.key;
-    rooms.push(room);
-  });
-
-  if (document.getElementById("sec-rooms").classList.contains("active-sec")) {
-    renderRooms();
-  }
-}, error => {
-  console.error("Rooms listener:", error);
-});
+  rooms = []; snapshot.forEach(child => { const room = child.val(); if (!room || typeof room!== "object") return; room._id = child.key; rooms.push(room); });
+  if (document.getElementById("sec-rooms").classList.contains("active-sec")) { renderRooms(); }
+}, error => { console.error("Rooms listener:", error); });
 
 window.saveRoom = async function() {
   if (!myUsername) return alert("سجل دخول الأول");
-
   const game = document.getElementById("f-game").value;
   const max = Number(document.getElementById("f-count").value);
   const desc = document.getElementById("f-desc").value.trim();
   const link = document.getElementById("f-link").value.trim();
-
   if (!allGames.includes(game)) return alert("اختار لعبة صحيحة");
-  if (!Number.isInteger(max) || max < 2 || max > 15) {
-    return alert("عدد اللاعبين لازم يكون من 2 إلى 15");
-  }
-  if (!validRoomURL(link)) {
-    return alert("اكتب رابط صحيح يبدأ بـ https:// أو http://");
-  }
-
+  if (!Number.isInteger(max) || max < 2 || max > 15) { return alert("عدد اللاعبين لازم يكون من 2 إلى 15"); }
+  if (!validRoomURL(link)) { return alert("اكتب رابط صحيح يبدأ بـ https:// أو http://"); }
   try {
     const roomRef = push(ref(db, "rooms"));
-
-    await set(roomRef, {
-      game,
-      max,
-      joined: 1,
-      desc,
-      link,
-      owner: myUsername,
-      joinedBy: { [myUsername]: true },
-      createdAt: Date.now()
-    });
-
-    document.getElementById("f-desc").value = "";
-    document.getElementById("f-link").value = "";
-    closeForm();
-
-    /* بعد إنشاء الروم، نعرض كل الرومات */
-    activeRoomGame = null;
-    openTab("rooms");
-  } catch (error) {
-    console.error(error);
-    alert("تعذر إنشاء الروم. راجع اتصالك وصلاحيات Firebase");
-  }
+    await set(roomRef, { game, max, joined: 1, desc, link, owner: myUsername, joinedBy: { [myUsername]: true }, createdAt: Date.now() });
+    document.getElementById("f-desc").value = ""; document.getElementById("f-link").value = "";
+    closeForm(); activeRoomGame = null; openTab("rooms");
+  } catch (error) { console.error(error); alert("تعذر إنشاء الروم. راجع اتصالك وصلاحيات Firebase"); }
 };
 
 window.joinRoom = async function(id) {
   if (!myUsername) return alert("سجل دخول الأول");
-
   const roomRef = ref(db, "rooms/" + id);
-
   try {
     const result = await runTransaction(roomRef, room => {
       if (!room) return;
-
-      if (!room.joinedBy || typeof room.joinedBy !== "object") {
-        room.joinedBy = {};
-      }
-
+      if (!room.joinedBy || typeof room.joinedBy!== "object") { room.joinedBy = {}; }
       const alreadyJoined = room.joinedBy[myUsername] === true;
       const count = roomMemberCount(room);
       const max = Math.min(15, Math.max(2, Number(room.max) || 15));
-
-      if (alreadyJoined) {
-        delete room.joinedBy[myUsername];
-      } else {
-        if (count >= max) return;
-        room.joinedBy[myUsername] = true;
-      }
-
-      room.joined = roomMemberCount(room);
-      return room;
+      if (alreadyJoined) { delete room.joinedBy[myUsername]; } else { if (count >= max) return; room.joinedBy[myUsername] = true; }
+      room.joined = roomMemberCount(room); return room;
     });
-
-    if (!result.committed) {
-      alert("تعذر تغيير العضوية؛ ربما الروم اتغيرت أو امتلأت");
-    }
-  } catch (error) {
-    console.error(error);
-    alert("حصل خطأ أثناء دخول الروم");
-  }
+    if (!result.committed) { alert("تعذر تغيير العضوية؛ ربما الروم اتغيرت أو امتلأت"); }
+  } catch (error) { console.error(error); alert("حصل خطأ أثناء دخول الروم"); }
 };
 
 window.deleteRoom = async function(id) {
   if (!myUsername) return alert("سجل دخول الأول");
-
   try {
     const snapshot = await get(ref(db, "rooms/" + id));
     if (!snapshot.exists()) return alert("الروم مش موجودة");
-
-    if (snapshot.val().owner !== myUsername) {
-      return alert("صاحب الروم فقط يقدر يحذفها");
-    }
-
+    if (snapshot.val().owner!== myUsername) { return alert("صاحب الروم فقط يقدر يحذفها"); }
     if (!confirm("متأكد إنك عايز تحذف الروم؟")) return;
     await remove(ref(db, "rooms/" + id));
-  } catch (error) {
-    console.error(error);
-    alert("تعذر حذف الروم");
-  }
+  } catch (error) { console.error(error); alert("تعذر حذف الروم"); }
 };
 
-/* الدردشة العامة */
 onValue(ref(db, "chat"), snapshot => {
-  const box = document.getElementById("chatList");
-  box.replaceChildren();
-
+  const box = document.getElementById("chatList"); box.replaceChildren();
   snapshot.forEach(child => {
     const data = child.val() || {};
-    const msg = document.createElement("div");
-    msg.className = "msg";
-
-    const user = document.createElement("b");
-    user.textContent = String(data.user || "مستخدم") + ": ";
-
-    msg.append(user, document.createTextNode(String(data.text || "")));
-    box.appendChild(msg);
+    const msg = document.createElement("div"); msg.className = "msg";
+    const user = document.createElement("b"); user.textContent = String(data.user || "مستخدم") + ": ";
+    msg.append(user, document.createTextNode(String(data.text || ""))); box.appendChild(msg);
   });
-
   box.scrollTop = box.scrollHeight;
 }, error => console.error("Chat listener:", error));
 
 window.sendChat = async function() {
   if (!myUsername) return alert("سجل دخول الأول");
-
-  const input = document.getElementById("chatText");
-  const text = input.value.trim();
-
-  if (!text) return;
-  if (text.length > 2000) return alert("الرسالة طويلة جدًا");
-
-  try {
-    await push(ref(db, "chat"), {
-      user: myUsername,
-      text,
-      createdAt: Date.now()
-    });
-    input.value = "";
-  } catch (error) {
-    console.error(error);
-    alert("تعذر إرسال الرسالة");
-  }
+  const input = document.getElementById("chatText"); const text = input.value.trim();
+  if (!text) return; if (text.length > 2000) return alert("الرسالة طويلة جدًا");
+  try { await push(ref(db, "chat"), { user: myUsername, text, createdAt: Date.now() }); input.value = ""; }
+  catch (error) { console.error(error); alert("تعذر إرسال الرسالة"); }
 };
 
 window.sendFriendReq = async function() {
   if (!myUsername) return alert("سجل دخول الأول");
-
-  const field = document.getElementById("friendSearch");
-  const friend = field.value.trim().toLowerCase();
-
-  if (!validUsername(friend)) return alert("اكتب يوزر صحيح");
-  if (friend === myUsername) return alert("مينفعش تبعت طلب لنفسك");
-
+  const field = document.getElementById("friendSearch"); const friend = field.value.trim().toLowerCase();
+  if (!validUsername(friend)) return alert("اكتب يوزر صحيح"); if (friend === myUsername) return alert("مينفعش تبعت طلب لنفسك");
   try {
     const userSnapshot = await get(ref(db, "usernames/" + friend));
     if (!userSnapshot.exists()) return alert("اليوزر مش موجود");
-
-    const existing = await get(
-      ref(db, `friends/${myUsername}/list/${friend}`)
-    );
-    if (existing.exists()) {
-      return alert("ده موجود بالفعل في قائمة أصدقائك");
-    }
-
-    /* الإصلاح: لو الشخص باعتلك طلب بالفعل، اقبل طلبه بدل طلب جديد */
-    const incoming = await get(
-      ref(db, `friends/${myUsername}/in/${friend}`)
-    );
-
-    if (incoming.exists()) {
-      return alert("الشخص ده باعتلك طلب صداقة بالفعل. افتح (جايلك) واقبل الطلب");
-    }
-
-    const pending = await get(
-      ref(db, `friends/${myUsername}/out/${friend}`)
-    );
+    const existing = await get(ref(db, `friends/${myUsername}/list/${friend}`));
+    if (existing.exists()) { return alert("ده موجود بالفعل في قائمة أصدقائك"); }
+    const incoming = await get(ref(db, `friends/${myUsername}/in/${friend}`));
+    if (incoming.exists()) { return alert("الشخص ده باعتلك طلب صداقة بالفعل. افتح (جايلك) واقبل الطلب"); }
+    const pending = await get(ref(db, `friends/${myUsername}/out/${friend}`));
     if (pending.exists()) return alert("أنت باعت طلب قبل كده");
-
-    await set(ref(db, `friends/${friend}/in/${myUsername}`), {
-      from: myUsername,
-      createdAt: Date.now()
-    });
-
-    await set(ref(db, `friends/${myUsername}/out/${friend}`), {
-      to: friend,
-      createdAt: Date.now()
-    });
-
-    field.value = "";
-    alert("اتبعتله ✅");
-  } catch (error) {
-    console.error(error);
-    alert("تعذر إرسال طلب الصداقة");
-  }
+    await set(ref(db, `friends/${friend}/in/${myUsername}`), { from: myUsername, createdAt: Date.now() });
+    await set(ref(db, `friends/${myUsername}/out/${friend}`), { to: friend, createdAt: Date.now() });
+    field.value = ""; alert("اتبعتله ✅");
+  } catch (error) { console.error(error); alert("تعذر إرسال طلب الصداقة"); }
 };
 
 window.showFriendsTab = async function(type) {
-  const result = document.getElementById("friendsResult");
-  result.replaceChildren();
-
-  if (!myUsername) {
-    result.textContent = "سجل دخول الأول";
-    return;
-  }
-
-  const titles = {
-    in: "📩 اللي جايلك",
-    out: "📤 اللي بعته",
-    friends: "✅ اصحابي - دوس عشان خاص 🔥"
-  };
-
-  const heading = document.createElement("h4");
-  heading.textContent = titles[type] || titles.friends;
-  result.appendChild(heading);
-
+  const result = document.getElementById("friendsResult"); result.replaceChildren();
+  if (!myUsername) { result.textContent = "سجل دخول الأول"; return; }
+  const titles = { in: "📩 اللي جايلك", out: "📤 اللي بعته", friends: "✅ اصحابي - دوس عشان خاص 🔥" };
+  const heading = document.createElement("h4"); heading.textContent = titles[type] || titles.friends; result.appendChild(heading);
   try {
-    const path = type === "in" ? "in" : type === "out" ? "out" : "list";
+    const path = type === "in"? "in" : type === "out"? "out" : "list";
     const snapshot = await get(ref(db, `friends/${myUsername}/${path}`));
-
     if (!snapshot.exists()) {
-      const empty = document.createElement("p");
-      empty.style.color = "#8a90a8";
-      empty.textContent = type === "out"
-        ? "مبعتش حاجة"
-        : type === "in"
-          ? "مفيش طلبات"
-          : "لسه مفيش اصحاب - ابعت طلبات";
-
-      result.appendChild(empty);
-      return;
+      const empty = document.createElement("p"); empty.style.color = "#8a90a8";
+      empty.textContent = type === "out"? "مبعتش حاجة" : type === "in"? "مفيش طلبات" : "لسه مفيش اصحاب - ابعت طلبات";
+      result.appendChild(empty); return;
     }
-
     snapshot.forEach(child => {
-      const name = child.key;
-      const card = document.createElement("div");
-      card.className = "card";
-
-      const label = document.createElement("span");
-      label.textContent = "👤 " + name;
-      card.appendChild(label);
-
+      const name = child.key; const card = document.createElement("div"); card.className = "card";
+      const label = document.createElement("span"); label.textContent = "👤 " + name; card.appendChild(label);
       if (type === "in") {
         const actions = document.createElement("div");
-
-        const accept = document.createElement("button");
-        accept.className = "btn";
-        accept.textContent = "قبول";
-        accept.onclick = () => window.acceptFriend(name);
-
-        const reject = document.createElement("button");
-        reject.className = "btn-del";
-        reject.textContent = "رفض";
-        reject.onclick = () => window.rejectFriend(name);
-
-        actions.append(accept, document.createTextNode(" "), reject);
-        card.appendChild(actions);
+        const accept = document.createElement("button"); accept.className = "btn"; accept.textContent = "قبول"; accept.onclick = () => window.acceptFriend(name);
+        const reject = document.createElement("button"); reject.className = "btn-del"; reject.textContent = "رفض"; reject.onclick = () => window.rejectFriend(name);
+        actions.append(accept, document.createTextNode(" "), reject); card.appendChild(actions);
       } else if (type === "out") {
-        const status = document.createElement("span");
-        status.style.color = "#8a90a8";
-        status.textContent = "مستني";
-        card.appendChild(status);
+        const status = document.createElement("span"); status.style.color = "#8a90a8"; status.textContent = "مستني"; card.appendChild(status);
       } else {
-        card.style.cursor = "pointer";
-
-        const chat = document.createElement("span");
-        chat.style.color = "#00ff88";
-        chat.textContent = "💬 خاص";
-        card.appendChild(chat);
-
+        card.style.cursor = "pointer"; const chat = document.createElement("span"); chat.style.color = "#00ff88"; chat.textContent = "💬 خاص"; card.appendChild(chat);
         card.onclick = () => window.openPrivate(name);
       }
-
       result.appendChild(card);
     });
-  } catch (error) {
-    console.error(error);
-    result.appendChild(
-      document.createTextNode("تعذر تحميل قائمة الأصدقاء")
-    );
-  }
+  } catch (error) { console.error(error); result.appendChild(document.createTextNode("تعذر تحميل قائمة الأصدقاء")); }
 };
 
 window.acceptFriend = async function(name) {
-  if (!myUsername || !validUsername(name)) return;
-
+  if (!myUsername ||!validUsername(name)) return;
   try {
-    const request = await get(
-      ref(db, `friends/${myUsername}/in/${name}`)
-    );
+    const request = await get(ref(db, `friends/${myUsername}/in/${name}`));
     if (!request.exists()) return alert("طلب الصداقة مش موجود");
-
     const updates = [
-      set(ref(db, `friends/${myUsername}/list/${name}`), {
-        since: Date.now()
-      }),
-      set(ref(db, `friends/${name}/list/${myUsername}`), {
-        since: Date.now()
-      }),
+      set(ref(db, `friends/${myUsername}/list/${name}`), { since: Date.now() }),
+      set(ref(db, `friends/${name}/list/${myUsername}`), { since: Date.now() }),
       remove(ref(db, `friends/${myUsername}/in/${name}`)),
       remove(ref(db, `friends/${name}/out/${myUsername}`))
     ];
-
-    await Promise.all(updates);
-    window.showFriendsTab("friends");
-  } catch (error) {
-    console.error(error);
-    alert("تعذر قبول الطلب");
-  }
+    await Promise.all(updates); window.showFriendsTab("friends");
+  } catch (error) { console.error(error); alert("تعذر قبول الطلب"); }
 };
 
 window.rejectFriend = async function(name) {
-  if (!myUsername || !validUsername(name)) return;
-
-  try {
-    await Promise.all([
-      remove(ref(db, `friends/${myUsername}/in/${name}`)),
-      remove(ref(db, `friends/${name}/out/${myUsername}`))
-    ]);
-
-    window.showFriendsTab("in");
-  } catch (error) {
-    console.error(error);
-    alert("تعذر رفض الطلب");
-  }
+  if (!myUsername ||!validUsername(name)) return;
+  try { await Promise.all([ remove(ref(db, `friends/${myUsername}/in/${name}`)), remove(ref(db, `friends/${name}/out/${myUsername}`)) ]); window.showFriendsTab("in"); }
+  catch (error) { console.error(error); alert("تعذر رفض الطلب"); }
 };
 
 window.openPrivate = async function(name) {
-  if (!myUsername || !validUsername(name) || name === myUsername) return;
-
+  if (!myUsername ||!validUsername(name) || name === myUsername) return;
   try {
-    const friendship = await get(
-      ref(db, `friends/${myUsername}/list/${name}`)
-    );
-
-    if (!friendship.exists()) {
-      return alert("الشات الخاص متاح للأصدقاء فقط");
-    }
-
-    if (privateListenerRef && privateListener) {
-      off(privateListenerRef, "value", privateListener);
-    }
-
+    const friendship = await get(ref(db, `friends/${myUsername}/list/${name}`));
+    if (!friendship.exists()) { return alert("الشات الخاص متاح للأصدقاء فقط"); }
+    if (privateListenerRef && privateListener) { off(privateListenerRef, "value", privateListener); }
     curPrivate = [myUsername, name].sort().join("_SEIF_");
     document.getElementById("privateWith").textContent = name + " 🔒 خاص";
     document.getElementById("privateBox").style.display = "flex";
-
     privateListenerRef = ref(db, "private/" + curPrivate);
-
     privateListener = snapshot => {
-      const box = document.getElementById("privateMsgs");
-      box.replaceChildren();
-
+      const box = document.getElementById("privateMsgs"); box.replaceChildren();
       snapshot.forEach(child => {
-        const data = child.val() || {};
-        const message = document.createElement("div");
-
-        message.style.cssText =
-          "padding:8px 12px;border-radius:10px;max-width:80%;";
-
-        if (data.from === myUsername) {
-          message.style.background = "#5865f2";
-          message.style.alignSelf = "flex-start";
-        } else {
-          message.style.background = "#222b45";
-          message.style.alignSelf = "flex-end";
-        }
-
-        message.textContent = String(data.text || "");
-        box.appendChild(message);
+        const data = child.val() || {}; const message = document.createElement("div");
+        message.style.cssText = "padding:8px 12px;border-radius:10px;max-width:80%;";
+        if (data.from === myUsername) { message.style.background = "#5865f2"; message.style.alignSelf = "flex-start"; }
+        else { message.style.background = "#222b45"; message.style.alignSelf = "flex-end"; }
+        message.textContent = String(data.text || ""); box.appendChild(message);
       });
-
       box.scrollTop = box.scrollHeight;
     };
-
-    onValue(privateListenerRef, privateListener, error => {
-      console.error("Private chat listener:", error);
-    });
-  } catch (error) {
-    console.error(error);
-    alert("تعذر فتح الشات الخاص");
-  }
+    onValue(privateListenerRef, privateListener, error => { console.error("Private chat listener:", error); });
+  } catch (error) { console.error(error); alert("تعذر فتح الشات الخاص"); }
 };
 
 window.closePrivate = function() {
-  if (privateListenerRef && privateListener) {
-    off(privateListenerRef, "value", privateListener);
-  }
-
-  privateListenerRef = null;
-  privateListener = null;
-  curPrivate = null;
-
-  document.getElementById("privateBox").style.display = "none";
-  document.getElementById("privateMsgs").replaceChildren();
+  if (privateListenerRef && privateListener) { off(privateListenerRef, "value", privateListener); }
+  privateListenerRef = null; privateListener = null; curPrivate = null;
+  document.getElementById("privateBox").style.display = "none"; document.getElementById("privateMsgs").replaceChildren();
 };
 
 window.sendPrivate = async function() {
-  if (!myUsername || !curPrivate) return;
-
+  if (!myUsername ||!curPrivate) return;
   const text = document.getElementById("privateText").value.trim();
-  if (!text) return;
-  if (text.length > 2000) return alert("الرسالة طويلة جدًا");
-
-  try {
-    await push(ref(db, "private/" + curPrivate), {
-      from: myUsername,
-      text,
-      createdAt: Date.now()
-    });
-
-    document.getElementById("privateText").value = "";
-  } catch (error) {
-    console.error(error);
-    alert("تعذر إرسال الرسالة");
-  }
+  if (!text) return; if (text.length > 2000) return alert("الرسالة طويلة جدًا");
+  try { await push(ref(db, "private/" + curPrivate), { from: myUsername, text, createdAt: Date.now() }); document.getElementById("privateText").value = ""; }
+  catch (error) { console.error(error); alert("تعذر إرسال الرسالة"); }
 };
 
-/* إرسال الرسائل بزر Enter */
-document.getElementById("chatText").addEventListener("keydown", event => {
-  if (event.key === "Enter") window.sendChat();
-});
-
-document.getElementById("privateText").addEventListener("keydown", event => {
-  if (event.key === "Enter") window.sendPrivate();
-});
-
-document.getElementById("loginInput").addEventListener("keydown", event => {
-  if (event.key === "Enter") window.doLogin();
-});
+document.getElementById("chatText").addEventListener("keydown", event => { if (event.key === "Enter") window.sendChat(); });
+document.getElementById("privateText").addEventListener("keydown", event => { if (event.key === "Enter") window.sendPrivate(); });
+document.getElementById("loginInput").addEventListener("keydown", event => { if (event.key === "Enter") window.doLogin(); });
 </script>
 </body>
-  </html>
+</html>
