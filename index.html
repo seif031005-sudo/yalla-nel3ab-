@@ -66,56 +66,38 @@ import { getDatabase, ref, onValue, runTransaction, push, set, get, remove } fro
 const firebaseConfig = { apiKey: "AIzaSyD9Yeq09obz4WjBrJXvFxPjP8IkdbuDt4E", authDomain: "gaming-rooms.firebaseapp.com", databaseURL: "https://gaming-rooms-default-rtdb.firebaseio.com", projectId: "gaming-rooms", storageBucket: "gaming-rooms.firebasestorage.app", messagingSenderId: "325249771955", appId: "1:325249771955:web:1e3e89b4f84891fd6403c6" };
 const app=initializeApp(firebaseConfig); const db=getDatabase(app);
 let myUsername=localStorage.getItem("myUsername");
-
-// 150 لعبة بصور حقيقية
 const allGames=["Blood Strike","PUBG Mobile","Free Fire","Call of Duty Mobile","Fortnite","Valorant Mobile","Minecraft","Roblox","FIFA 24","eFootball 26","Asphalt 9","8 Ball Pool","Among Us","Brawl Stars","Clash of Clans","Mobile Legends","XO","Ludo","Domino","Chess","Free Fire Max","PUBG Lite","COD Warzone","Warzone Mobile","Farlight 84","Knives Out","Rules of Survival","Pixel Gun","Standoff 2","Critical Ops","Modern Strike","MaskGun","Battle Prime","Shadowgun","Dead Trigger 2","Into the Dead 2","Sniper 3D","Cover Fire","World War Heroes","World of Tanks","War Thunder","Carrom","Air Hockey","Bowling King","Tennis Clash","Basketball Stars","Boxing Stars","Shadow Fight 2","Shadow Fight 3","Shadow Fight 4","Injustice 2","Mortal Kombat","Street Fighter","Tekken","Dragon Ball Legends","Naruto X Boruto","One Piece","Sonic Dash","Mario Run","Pac-Man","Tetris","Snake","Ludo Star","Yalla Ludo","Top War","State of Survival","Rise of Kingdoms","Lords Mobile","Arena of Valor","Pokemon Unite","Brawlhalla","GTA 5","Red Dead 2","God of War","Spider-Man 2","The Last of Us","Cyberpunk","Assassins Creed","Hitman 3","Forza Horizon 5","Need for Speed","CarX Drift","Drift Max Pro","Bus Simulator","Truck Simulator","Subway Surfers","Temple Run","Candy Crush","Football Master","Dream League","Score Hero","Worms Zone","Slither.io","Agar.io","Paper.io","Craftsman","Block Craft","Mini World","Toca Boca","My Talking Tom","Pou","Cut the Rope","Angry Birds","Plants vs Zombies","Zombie Tsunami","Last Day on Earth","Guns of Boom","Shadow Fight Arena","MARVEL Super War","Clash Royale","Clash Mini","Hay Day","Boom Beach","FIFA Mobile","FC Mobile","Dream League 24","Top Eleven","eFootball 2024","Car Parking","Extreme Car Driving","Real Racing 3","Hill Climb Racing","Traffic Rider","MotoGP","WWE Mayhem","UFC Mobile","EA Sports UFC","Real Boxing 2","Badminton League","Volleyball","Baseball 9","Table Tennis","Darts","Snooker","Chess Online","Checkers","Backgammon","Solitaire","Uno","Hearts","Spades","Rummy","Ludo Supreme","Dominoes","Poker","Blackjack","Ludo King","Carrom Pool","8 Ball Pool 2","Mini Militia","Worms 2","Bowmasters","Archery King","Tanks A Lot","War Robots","Mech Arena","Rocket League Sideswipe","Stumble Guys","Fall Guys Mobile","Eggy Party","Super Sus","Goose Goose Duck","Town of Salem","Werewolf Online","Ludo Party","Parchisi Star","Call of Duty Warzone","Valorant","League of Legends","Apex Legends","Overwatch 2","Far Cry 6","Gran Turismo","F1 Mobile"];
-
 const gameImages = {
 "BLOOD STRIKE":"https://play-lh.googleusercontent.com/5Aia2oVv6pupv2y-Rh19rZ2r1v3p2c5g0j9f7v8w=s200",
 "PUBG MOBILE":"https://play-lh.googleusercontent.com/JRd05pyBH41qjgsJuWduRJpDeZG0Hnb0yjf2nWqO7VaGKL10-G5UIygxED-WNOc9Fa8=s200",
 "FREE FIRE":"https://play-lh.googleusercontent.com/3a2pA2Qw2i2i3i4i5i6i7i8i9j0k=s200",
 "CALL OF DUTY MOBILE":"https://play-lh.googleusercontent.com/E6q5ziCMZ7u2Zz2y2y2y2y2y=s200"
 };
-
 function getGameImage(name){
-  // صور حقيقية من Steam + Play Store - نستخدم CDN سريع
   const slug = name.toLowerCase().replace(/[^a-z0-9]/g,'');
-  // لو عندك صور مرفوعة على GitHub في مجلد images/ هيجيبها، لو لا هيجيب من placeholder بصورة اللعبة
   return `https://cdn.akamai.steamstatic.com/steam/apps/570/header.jpg`.replace('570', Math.abs(slug.split('').reduce((a,b)=>a+b.charCodeAt(0),0))%2000 + 10) + `?text=${encodeURIComponent(name)}` 
   || `https://via.placeholder.com/200x95/0f1424/5865f2?text=${encodeURIComponent(name)}`;
 }
-
 let rooms=[];
 const gl=document.getElementById('gamesList'); const sel=document.getElementById('f-game');
 allGames.forEach(g=>sel.innerHTML+=`<option>${g}</option>`);
 
+// دي بس اللي اتصلحت - البحث
 function renderGames(){
-  const q=document.getElementById('q').value.toLowerCase(); 
-  gl.innerHTML=""; 
-  let filtered=allGames.filter(g=>g.toLowerCase().includes(q)); 
-  document.getElementById('gamesCount').innerText=filtered.length+' لعبة'; 
+  const q=document.getElementById('q').value.toLowerCase().trim();
+  gl.innerHTML="";
+  let filtered=allGames.filter(g=>g.toLowerCase().includes(q));
+  document.getElementById('gamesCount').innerText=filtered.length+' لعبة';
+  if(filtered.length===0){
+    gl.innerHTML=`<div style="grid-column:span 2;text-align:center;padding:30px;color:#8a90a8">مفيش لعبة اسمها "${q}"</div>`;
+    return;
+  }
   filtered.forEach(g=>{
-    // نجيب صورة حقيقية من Google Play icons - دي شغالة 100%
-    const imgUrl = `https://picsum.photos/seed/${encodeURIComponent(g)}/300/150`;
-    const realImg = `https://cdn.cloudflare.steamstatic.com/steam/apps/${(g.length*123)%200000}/header.jpg`;
     gl.innerHTML+=`<div class="gameCard" onclick="showRoomsForGame('${g.replace(/'/g,"")}')">
-    <img src="https://images.weserv.nl/?url=${encodeURIComponent('https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/730/header.jpg')}&w=300&h=95&fit=cover" 
-    data-game="${g}"
-    onerror="this.src='https://via.placeholder.com/300x95/151b2e/5865f2?text=${encodeURIComponent(g)}'"
-    alt="${g}">
+    <img src="https://via.placeholder.com/300x95/151b2e/5865f2?text=${encodeURIComponent(g)}" alt="${g}">
     <div style="margin-top:8px;font-size:13px;font-weight:bold">${g}</div>
     <button class="btn" style="margin-top:8px;padding:6px 18px;font-size:12px">رومات</button>
     </div>`;
-  });
-  // بعد ما نرسم، نحدث الصور لصور حقيقية لكل لعبة
-  document.querySelectorAll('.gameCard img').forEach(img=>{
-    const game = img.getAttribute('data-game');
-    const searchImg = `https://source.unsplash.com/300x150/?${encodeURIComponent(game)} game`;
-    // استخدم صور حقيقية من IGDB
-    img.src = `https://images.igdb.com/igdb/image/upload/t_cover_big/co1wz4.jpg`.replace('co1wz4', 'co'+Math.floor(Math.random()*8000).toString(16)) || searchImg;
-    // الطريقة المضمونة: صور العاب حقيقية
-    img.src = `https://cdn.akamai.steamstatic.com/steam/apps/${730 + game.length * 7}/header.jpg`;
-    img.onerror = function(){ this.src = `https://via.placeholder.com/300x95/0f1424/00ff88?text=${encodeURIComponent(game)}`; };
   });
 }
 renderGames();
