@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>موقع المطور seif</title>
 <style>
-*{box-sizing:border-box} body{background:#0a0e1c;color:#fff;font-family:sans-serif;margin:0}
+*{box-sizing:border-box}
+body{background:#0a0e1c;color:#fff;font-family:sans-serif;margin:0}
 .top{background:#151b2e;text-align:center;padding:16px;font-weight:bold;border-bottom:2px solid #5865f2;font-size:18px}
 .tabs{display:flex;justify-content:space-around;background:#151b2e;padding:8px 0;position:sticky;top:0;z-index:50}
 .tabs div{padding:12px 10px;cursor:pointer;color:#7a8194;border-radius:10px;font-size:14px}
@@ -23,13 +25,15 @@
 .modal.active{display:flex}
 .box{background:#151b2e;padding:20px;border-radius:16px;width:92%;max-width:400px;border:1px solid #222b45}
 .box input,.box select,.box textarea{width:100%;padding:12px;margin:8px 0;background:#0f1424;border:1px solid #222b45;color:#fff;border-radius:10px}
-.chatBox{height:60vh;overflow:auto;padding:10px}.msg{background:#151b2e;margin:6px 12px;padding:10px;border-radius:10px;border:1px solid #1e2742}.msg b{color:#5865f2}
+.chatBox{height:60vh;overflow:auto;padding:10px}
+.msg{background:#151b2e;margin:6px 12px;padding:10px;border-radius:10px;border:1px solid #1e2742}
+.msg b{color:#5865f2}
 .chatInput{display:flex;gap:8px;padding:12px;background:#151b2e;position:sticky;bottom:0}
 .chatInput input{flex:1;padding:12px;background:#0f1424;border:1px solid #222b45;color:#fff;border-radius:10px}
 .friendBox{background:#151b2e;margin:15px;padding:20px;border-radius:14px;border:1px solid #1e2742;text-align:center}
 .countBadge{background:#000;border:1px solid #5865f2;padding:4px 10px;border-radius:20px;font-size:12px}
 .userBadge{background:#222b45;padding:8px 14px;border-radius:20px;font-size:13px;border:1px solid #5865f2}
-#privateBox{position:fixed;bottom:0;right:10px;width:340px;height:400px;background:#151b2e;border:2px solid #5865f2;border-radius:15px 15px 0 0;display:none;flex-direction:column;z-index:1000}
+#privateBox{position:fixed;bottom:0;right:10px;width:340px;max-width:calc(100% - 20px);height:400px;background:#151b2e;border:2px solid #5865f2;border-radius:15px 15px 0 0;display:none;flex-direction:column;z-index:1000}
 .gamesGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:12px}
 .gameCard{background:#151b2e;border-radius:16px;overflow:hidden;border:1px solid #1e2742;cursor:pointer;text-align:center;padding:8px}
 .gameCard img{width:100%;height:85px;object-fit:cover;background:#0f1424;border-radius:10px}
@@ -37,81 +41,804 @@
 </style>
 </head>
 <body>
-<div class="top">مرحبا في موقع المطور seif</div>
-<div id="loginModal" class="modal active"><div class="box" style="text-align:center"><h2>🎮 اهلا بيك!</h2><input id="loginInput" placeholder="يوزر نيم انجليزي" maxlength="15"><button class="btn-full" onclick="doLogin()">دخول 🚀</button><p id="loginMsg" style="color:#ff3b5c"></p></div></div>
+
+<div class="top" id="topUser">مرحبا في موقع المطور seif</div>
+
+<div id="loginModal" class="modal active">
+  <div class="box" style="text-align:center">
+    <h2>🎮 اهلا بيك!</h2>
+    <input id="loginInput" placeholder="يوزر نيم انجليزي" maxlength="15" autocomplete="username">
+    <button class="btn-full" onclick="doLogin()">دخول 🚀</button>
+    <p id="loginMsg" style="color:#ff3b5c"></p>
+  </div>
+</div>
+
 <div class="tabs">
-<div onclick="openTab('friends')" id="tb-friends">👥 اصدقاء</div>
-<div onclick="openTab('chat')" id="tb-chat">💬 دردشة</div>
-<div onclick="openTab('rooms')" id="tb-rooms">🎮 رومات 15</div>
-<div onclick="openTab('games')" id="tb-games" class="active">🕹️ 150 لعبة</div>
+  <div onclick="openTab('friends')" id="tb-friends">👥 اصدقاء</div>
+  <div onclick="openTab('chat')" id="tb-chat">💬 دردشة</div>
+  <div onclick="openTab('rooms')" id="tb-rooms">🎮 رومات 15</div>
+  <div onclick="openTab('games')" id="tb-games" class="active">🕹️ 150 لعبة</div>
 </div>
+
 <div id="sec-games" class="section active-sec">
-<div style="padding:10px;display:flex;justify-content:space-between"><span class="userBadge" id="showUser"></span><span class="userBadge" id="gamesCount"></span></div>
-<div class="searchBox"><input id="q" type="text" placeholder="🔍 ابحث مثلا blood او pubg..."></div>
-<div id="gamesList" class="gamesGrid"></div>
+  <div style="padding:10px;display:flex;justify-content:space-between">
+    <span class="userBadge" id="showUser"></span>
+    <span class="userBadge" id="gamesCount"></span>
+  </div>
+  <div class="searchBox">
+    <input id="q" type="text" placeholder="🔍 ابحث مثلا blood او pubg...">
+  </div>
+  <div id="gamesList" class="gamesGrid"></div>
 </div>
-<div id="sec-rooms" class="section"><div style="padding:10px"><button class="btn-full" onclick="openForm()">+ اعمل روم - 15/15</button></div><div id="roomsList"></div></div>
-<div id="sec-chat" class="section"><div id="chatList" class="chatBox"></div><div class="chatInput"><input id="chatText" placeholder="اكتب في العام..."><button class="btn" onclick="sendChat()">ارسال</button></div></div>
-<div id="sec-friends" class="section"><div class="friendBox"><p>انت: <b id="myNameShow" style="color:#5865f2"></b></p><input id="friendSearch" placeholder="يوزر صاحبك"><button class="btn-full" onclick="sendFriendReq()">ابعت طلب ✅</button><div style="display:flex;gap:8px;margin-top:15px"><button class="btn" style="flex:1;background:#222b45" onclick="showFriendsTab('in')">📩 جايلك</button><button class="btn" style="flex:1;background:#222b45" onclick="showFriendsTab('out')">📤 بعته</button><button class="btn" style="flex:1;background:#5865f2" onclick="showFriendsTab('friends')">✅ خاص</button></div><div id="friendsResult" style="margin-top:15px;text-align:right"></div></div></div>
-<div id="modal" class="modal"><div class="box"><h3 style="text-align:center">🎮 روم جديد 15/15</h3><select id="f-game"></select><input type="number" id="f-count" value="15" min="2" max="15"><textarea id="f-desc" placeholder="الوصف"></textarea><input id="f-link" placeholder="لينك"><div style="display:flex;gap:10px"><button class="btn" style="flex:1" onclick="saveRoom()">انشاء</button><button class="btn-del" style="flex:1" onclick="closeForm()">الغاء</button></div></div></div>
-<div id="privateBox"><div style="background:#5865f2;padding:10px;display:flex;justify-content:space-between"><span id="privateWith"></span><span onclick="closePrivate()" style="cursor:pointer">X</span></div><div id="privateMsgs" style="flex:1;overflow:auto;padding:10px;display:flex;flex-direction:column;gap:6px"></div><div style="display:flex;gap:5px;padding:8px"><input id="privateText" style="flex:1;padding:10px;background:#0f1424;border:1px solid #222b45;color:#fff;border-radius:10px" placeholder="خاص..."><button class="btn" onclick="sendPrivate()">➤</button></div></div>
+
+<div id="sec-rooms" class="section">
+  <div style="padding:10px">
+    <button class="btn-full" onclick="openForm()">+ اعمل روم - 15/15</button>
+  </div>
+  <div id="roomsList"></div>
+</div>
+
+<div id="sec-chat" class="section">
+  <div id="chatList" class="chatBox"></div>
+  <div class="chatInput">
+    <input id="chatText" placeholder="اكتب في العام...">
+    <button class="btn" onclick="sendChat()">ارسال</button>
+  </div>
+</div>
+
+<div id="sec-friends" class="section">
+  <div class="friendBox">
+    <p>انت: <b id="myNameShow" style="color:#5865f2"></b></p>
+    <input id="friendSearch" placeholder="يوزر صاحبك" maxlength="15">
+    <button class="btn-full" onclick="sendFriendReq()">ابعت طلب ✅</button>
+    <div style="display:flex;gap:8px;margin-top:15px">
+      <button class="btn" style="flex:1;background:#222b45" onclick="showFriendsTab('in')">📩 جايلك</button>
+      <button class="btn" style="flex:1;background:#222b45" onclick="showFriendsTab('out')">📤 بعته</button>
+      <button class="btn" style="flex:1;background:#5865f2" onclick="showFriendsTab('friends')">✅ خاص</button>
+    </div>
+    <div id="friendsResult" style="margin-top:15px;text-align:right"></div>
+  </div>
+</div>
+
+<div id="modal" class="modal">
+  <div class="box">
+    <h3 style="text-align:center">🎮 روم جديد 15/15</h3>
+    <select id="f-game"></select>
+    <input type="number" id="f-count" value="15" min="2" max="15">
+    <textarea id="f-desc" placeholder="الوصف" maxlength="500"></textarea>
+    <input id="f-link" placeholder="لينك" maxlength="2000">
+    <div style="display:flex;gap:10px">
+      <button class="btn" style="flex:1" onclick="saveRoom()">انشاء</button>
+      <button class="btn-del" style="flex:1" onclick="closeForm()">الغاء</button>
+    </div>
+  </div>
+</div>
+
+<div id="privateBox">
+  <div style="background:#5865f2;padding:10px;display:flex;justify-content:space-between">
+    <span id="privateWith"></span>
+    <span onclick="closePrivate()" style="cursor:pointer">X</span>
+  </div>
+  <div id="privateMsgs" style="flex:1;overflow:auto;padding:10px;display:flex;flex-direction:column;gap:6px"></div>
+  <div style="display:flex;gap:5px;padding:8px">
+    <input id="privateText" style="flex:1;padding:10px;background:#0f1424;border:1px solid #222b45;color:#fff;border-radius:10px" placeholder="خاص..." maxlength="2000">
+    <button class="btn" onclick="sendPrivate()">➤</button>
+  </div>
+</div>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, onValue, runTransaction, push, set, get, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-const firebaseConfig = { apiKey: "AIzaSyD9Yeq09obz4WjBrJXvFxPjP8IkdbuDt4E", authDomain: "gaming-rooms.firebaseapp.com", databaseURL: "https://gaming-rooms-default-rtdb.firebaseio.com", projectId: "gaming-rooms", storageBucket: "gaming-rooms.firebasestorage.app", messagingSenderId: "325249771955", appId: "1:325249771955:web:1e3e89b4f84891fd6403c6" };
-const app=initializeApp(firebaseConfig); const db=getDatabase(app);
-let myUsername=localStorage.getItem("myUsername");
-const allGames=["Blood Strike","PUBG Mobile","Free Fire","Call of Duty Mobile","Fortnite","Valorant Mobile","Minecraft","Roblox","FIFA 24","eFootball 26","Asphalt 9","8 Ball Pool","Among Us","Brawl Stars","Clash of Clans","Mobile Legends","XO","Ludo","Domino","Chess","Free Fire Max","PUBG Lite","COD Warzone","Warzone Mobile","Farlight 84","Knives Out","Rules of Survival","Pixel Gun","Standoff 2","Critical Ops","Modern Strike","MaskGun","Battle Prime","Shadowgun","Dead Trigger 2","Into the Dead 2","Sniper 3D","Cover Fire","World War Heroes","World of Tanks","War Thunder","Carrom","Air Hockey","Bowling King","Tennis Clash","Basketball Stars","Boxing Stars","Shadow Fight 2","Shadow Fight 3","Shadow Fight 4","Injustice 2","Mortal Kombat","Street Fighter","Tekken","Dragon Ball Legends","Naruto X Boruto","One Piece","Sonic Dash","Mario Run","Pac-Man","Tetris","Snake","Ludo Star","Yalla Ludo","Top War","State of Survival","Rise of Kingdoms","Lords Mobile","Arena of Valor","Pokemon Unite","Brawlhalla","GTA 5","Red Dead 2","God of War","Spider-Man 2","The Last of Us","Cyberpunk","Assassins Creed","Hitman 3","Forza Horizon 5","Need for Speed","CarX Drift","Drift Max Pro","Bus Simulator","Truck Simulator","Subway Surfers","Temple Run","Candy Crush","Football Master","Dream League","Score Hero","Worms Zone","Slither.io","Agar.io","Paper.io","Craftsman","Block Craft","Mini World","Toca Boca","My Talking Tom","Pou","Cut the Rope","Angry Birds","Plants vs Zombies","Zombie Tsunami","Last Day on Earth","Guns of Boom","Shadow Fight Arena","MARVEL Super War","Clash Royale","Clash Mini","Hay Day","Boom Beach","FIFA Mobile","FC Mobile","Dream League 24","Top Eleven","eFootball 2024","Car Parking","Extreme Car Driving","Real Racing 3","Hill Climb Racing","Traffic Rider","MotoGP","WWE Mayhem","UFC Mobile","EA Sports UFC","Real Boxing 2","Badminton League","Volleyball","Baseball 9","Table Tennis","Darts","Snooker","Chess Online","Checkers","Backgammon","Solitaire","Uno","Hearts","Spades","Rummy","Ludo Supreme","Dominoes","Poker","Blackjack","Ludo King","Carrom Pool","8 Ball Pool 2","Mini Militia","Worms 2","Bowmasters","Archery King","Tanks A Lot","War Robots","Mech Arena","Rocket League Sideswipe","Stumble Guys","Fall Guys Mobile","Eggy Party","Super Sus","Goose Goose Duck","Town of Salem","Werewolf Online","Ludo Party","Parchisi Star"];
-let rooms=[];
-const gl=document.getElementById('gamesList');
-const sel=document.getElementById('f-game');
-allGames.forEach(g=>sel.innerHTML+=`<option>${g}</option>`);
+import {
+  getDatabase, ref, onValue, runTransaction, push,
+  set, get, remove, off
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-function renderGames(){
-  const searchInput = document.getElementById('q');
-  const q = searchInput.value.toLowerCase().trim();
-  gl.innerHTML = "";
-  const filtered = allGames.filter(game => game.toLowerCase().includes(q));
-  document.getElementById('gamesCount').innerText = filtered.length + ' لعبة';
-  if(filtered.length === 0){
-    gl.innerHTML = `<div style="grid-column: span 2;text-align:center;padding:30px;color:#8a90a8">مفيش لعبة اسمها "${q}"</div>`;
+const firebaseConfig = {
+  apiKey: "AIzaSyD9Yeq09obz4WjBrJXvFxPjP8IkdbuDt4E",
+  authDomain: "gaming-rooms.firebaseapp.com",
+  databaseURL: "https://gaming-rooms-default-rtdb.firebaseio.com",
+  projectId: "gaming-rooms",
+  storageBucket: "gaming-rooms.firebasestorage.app",
+  messagingSenderId: "325249771955",
+  appId: "1:325249771955:web:1e3e89b4f84891fd6403c6"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+let myUsername = localStorage.getItem("myUsername");
+let rooms = [];
+let curPrivate = null;
+let privateListenerRef = null;
+let privateListener = null;
+let chatListenerRef = null;
+
+const gl = document.getElementById("gamesList");
+const sel = document.getElementById("f-game");
+
+const allGames = [
+"Blood Strike","PUBG Mobile","Free Fire","Call of Duty Mobile","Fortnite",
+"Valorant Mobile","Minecraft","Roblox","FIFA 24","eFootball 26","Asphalt 9",
+"8 Ball Pool","Among Us","Brawl Stars","Clash of Clans","Mobile Legends",
+"XO","Ludo","Domino","Chess","Free Fire Max","PUBG Lite","COD Warzone",
+"Warzone Mobile","Farlight 84","Knives Out","Rules of Survival","Pixel Gun",
+"Standoff 2","Critical Ops","Modern Strike","MaskGun","Battle Prime",
+"Shadowgun","Dead Trigger 2","Into the Dead 2","Sniper 3D","Cover Fire",
+"World War Heroes","World of Tanks","War Thunder","Carrom","Air Hockey",
+"Bowling King","Tennis Clash","Basketball Stars","Boxing Stars","Shadow Fight 2",
+"Shadow Fight 3","Shadow Fight 4","Injustice 2","Mortal Kombat","Street Fighter",
+"Tekken","Dragon Ball Legends","Naruto X Boruto","One Piece","Sonic Dash",
+"Mario Run","Pac-Man","Tetris","Snake","Ludo Star","Yalla Ludo","Top War",
+"State of Survival","Rise of Kingdoms","Lords Mobile","Arena of Valor",
+"Pokemon Unite","Brawlhalla","GTA 5","Red Dead 2","God of War","Spider-Man 2",
+"The Last of Us","Cyberpunk","Assassins Creed","Hitman 3","Forza Horizon 5",
+"Need for Speed","CarX Drift","Drift Max Pro","Bus Simulator","Truck Simulator",
+"Subway Surfers","Temple Run","Candy Crush","Football Master","Dream League",
+"Score Hero","Worms Zone","Slither.io","Agar.io","Paper.io","Craftsman",
+"Block Craft","Mini World","Toca Boca","My Talking Tom","Pou","Cut the Rope",
+"Angry Birds","Plants vs Zombies","Zombie Tsunami","Last Day on Earth",
+"Guns of Boom","Shadow Fight Arena","MARVEL Super War","Clash Royale",
+"Clash Mini","Hay Day","Boom Beach","FIFA Mobile","FC Mobile","Dream League 24",
+"Top Eleven","eFootball 2024","Car Parking","Extreme Car Driving","Real Racing 3",
+"Hill Climb Racing","Traffic Rider","MotoGP","WWE Mayhem","UFC Mobile",
+"EA Sports UFC","Real Boxing 2","Badminton League","Volleyball","Baseball 9",
+"Table Tennis","Darts","Snooker","Chess Online","Checkers","Backgammon",
+"Solitaire","Uno","Hearts","Spades","Rummy","Ludo Supreme","Dominoes","Poker",
+"Blackjack","Ludo King","Carrom Pool","8 Ball Pool 2","Mini Militia","Worms 2",
+"Bowmasters","Archery King","Tanks A Lot","War Robots","Mech Arena",
+"Rocket League Sideswipe","Stumble Guys","Fall Guys Mobile","Eggy Party",
+"Super Sus","Goose Goose Duck","Town of Salem","Werewolf Online","Ludo Party",
+"Parchisi Star"
+];
+
+// عرض النصوص القادمة من المستخدمين بأمان داخل HTML.
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, ch => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[ch]);
+}
+
+function validUsername(name) {
+  return /^[a-zA-Z0-9_]{3,15}$/.test(name);
+}
+
+function validRoomURL(value) {
+  if (!value.trim()) return true;
+  try {
+    const url = new URL(value.trim());
+    return url.protocol === "https:" || url.protocol === "http:";
+  } catch {
+    return false;
+  }
+}
+
+function roomMemberCount(room) {
+  return Object.keys(room.joinedBy || {}).filter(
+    name => room.joinedBy[name] === true
+  ).length;
+}
+
+allGames.forEach(game => {
+  const option = document.createElement("option");
+  option.value = game;
+  option.textContent = game;
+  sel.appendChild(option);
+});
+
+function renderGames() {
+  const q = document.getElementById("q").value.toLowerCase().trim();
+  gl.replaceChildren();
+
+  const filtered = allGames.filter(game =>
+    game.toLowerCase().includes(q)
+  );
+
+  document.getElementById("gamesCount").textContent =
+    filtered.length + " لعبة";
+
+  if (!filtered.length) {
+    const empty = document.createElement("div");
+    empty.style.cssText =
+      "grid-column:span 2;text-align:center;padding:30px;color:#8a90a8";
+    empty.textContent = `مفيش لعبة اسمها "${q}"`;
+    gl.appendChild(empty);
     return;
   }
-  filtered.forEach(g=>{
-    const safe = g.replace(/'/g,"\\'");
-    gl.innerHTML += `
-    <div class="gameCard" onclick="showRoomsForGame('${safe}')">
-      <div style="width:100%;height:85px;background:#0f1424;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:16px;color:#5865f2;border:1px solid #222b45">${g}</div>
-      <div style="margin-top:8px;font-size:13px;font-weight:bold">${g}</div>
-      <button class="btn" style="margin-top:8px;padding:6px 18px;font-size:12px">رومات</button>
-    </div>`;
+
+  filtered.forEach(game => {
+    const card = document.createElement("div");
+    card.className = "gameCard";
+
+    const nameBox = document.createElement("div");
+    nameBox.style.cssText =
+      "width:100%;height:85px;background:#0f1424;border-radius:10px;" +
+      "display:flex;align-items:center;justify-content:center;font-weight:bold;" +
+      "font-size:16px;color:#5865f2;border:1px solid #222b45";
+    nameBox.textContent = game;
+
+    const label = document.createElement("div");
+    label.style.cssText = "margin-top:8px;font-size:13px;font-weight:bold";
+    label.textContent = game;
+
+    const button = document.createElement("button");
+    button.className = "btn";
+    button.style.cssText = "margin-top:8px;padding:6px 18px;font-size:12px";
+    button.textContent = "رومات";
+    button.addEventListener("click", event => {
+      event.stopPropagation();
+      window.showRoomsForGame(game);
+    });
+
+    card.append(nameBox, label, button);
+    card.addEventListener("click", () => window.showRoomsForGame(game));
+    gl.appendChild(card);
   });
 }
 
-document.getElementById('q').addEventListener('input', renderGames);
+document.getElementById("q").addEventListener("input", renderGames);
 renderGames();
 
-async function checkLogin(){ if(myUsername){document.getElementById('loginModal').classList.remove('active'); document.getElementById('showUser').innerText='👤 '+myUsername; document.getElementById('myNameShow').innerText=myUsername; document.getElementById('topUser').innerText='مرحبا في موقع المطور '+myUsername;} else {document.getElementById('topUser').innerText='مرحبا في موقع المطور seif';} } checkLogin();
-window.doLogin=async function(){let name=document.getElementById('loginInput').value.trim().toLowerCase(); if(name.length<3){document.getElementById('loginMsg').innerText='قصير';return} const snap=await get(ref(db,'usernames/'+name)); if(snap.exists() && snap.val()!==localStorage.getItem('myDeviceId')){document.getElementById('loginMsg').innerText='متاخد';return} let d=localStorage.getItem('myDeviceId')||Date.now()+''+Math.random(); localStorage.setItem('myDeviceId',d); await set(ref(db,'usernames/'+name),d); myUsername=name; localStorage.setItem('myUsername',myUsername); checkLogin();}
-function roomHTML(r){const full=r.joined>=r.max; return `<div class="room ${full?'full':''}"><div style="display:flex;justify-content:space-between;width:100%"><div style="text-align:right"><b>${r.game} <span class="countBadge">${r.joined}/${r.max}</span></b> ${full?'🔒 مقفول 15/15':'🟢 فاضي'}<br><small>صاحبها: ${r.owner}</small><p style="color:#8a90a8;font-size:12px">${r.desc||''}</p>${r.link?`<a href="${r.link}" target="_blank" style="color:#5865f2">🔗 لينك</a>`:''}</div><div style="display:flex;flex-direction:column;gap:6px"><button class="btn" ${full?'disabled':''} onclick="joinRoom('${r._id}')">${r.joinedBy&&r.joinedBy[myUsername]?'خروج':'دخول'}</button>${r.owner===myUsername?`<button class="btn-del" onclick="deleteRoom('${r._id}')">🗑️</button>`:''}</div></div></div>`;}
-window.showRoomsForGame=function(g){openTab('rooms'); let f=rooms.filter(r=>r.game===g); document.getElementById('roomsList').innerHTML=f.length?f.map(roomHTML).join(''):`<div style="text-align:center;padding:30px;color:#8a90a8">مفيش رومات لـ ${g}<br><button class="btn" style="margin-top:10px" onclick="openForm()">اعمل اول روم</button></div>`;}
-window.openTab=function(n){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active-sec')); document.querySelectorAll('.tabs div').forEach(t=>t.classList.remove('active')); document.getElementById('sec-'+n).classList.add('active-sec'); document.getElementById('tb-'+n).classList.add('active'); if(n==='friends') showFriendsTab('friends');}
-window.openForm=function(){document.getElementById('modal').classList.add('active');}
-window.closeForm=function(){document.getElementById('modal').classList.remove('active');}
-onValue(ref(db,'rooms'),snap=>{rooms=[]; snap.forEach(c=>{let r=c.val(); r._id=c.key; rooms.push(r);}); if(document.getElementById('sec-rooms').classList.contains('active-sec')){document.getElementById('roomsList').innerHTML=rooms.map(roomHTML).join('')||'<div style="text-align:center;padding:30px;color:#8a90a8">مفيش رومات</div>';}});
-window.saveRoom=async function(){let game=document.getElementById('f-game').value; let max=parseInt(document.getElementById('f-count').value); if(max>15) max=15; if(max<2) max=2; let desc=document.getElementById('f-desc').value; let link=document.getElementById('f-link').value; let id=push(ref(db,'rooms')).key; await set(ref(db,'rooms/'+id),{game,max,joined:1,desc,link,owner:myUsername,joinedBy:{[myUsername]:true}}); closeForm(); openTab('rooms');}
-window.joinRoom=async function(id){const rRef=ref(db,'rooms/'+id); const snap=await get(rRef); if(!snap.exists()) return; let r=snap.val(); if(r.joinedBy&&r.joinedBy[myUsername]){await runTransaction(rRef,c=>{if(c){c.joined--; delete c.joinedBy[myUsername]; if(c.joined<=0) return null;} return c;});} else {if(r.joined>=15){alert('الروم مليان 15/15 🔒');return} await runTransaction(rRef,c=>{if(c){if(c.joined>=15) return c; c.joined++; if(!c.joinedBy) c.joinedBy={}; c.joinedBy[myUsername]=true;} return c;});}}
-window.deleteRoom=async function(id){await remove(ref(db,'rooms/'+id));}
-onValue(ref(db,'chat'),snap=>{const box=document.getElementById('chatList'); box.innerHTML=''; snap.forEach(m=>{let d=m.val(); box.innerHTML+=`<div class="msg"><b>${d.user}:</b> ${d.text}</div>`;}); box.scrollTop=box.scrollHeight;});
-window.sendChat=async function(){let t=document.getElementById('chatText').value.trim(); if(!t) return; await push(ref(db,'chat'),{user:myUsername,text:t}); document.getElementById('chatText').value='';}
-window.sendFriendReq=async function(){let f=document.getElementById('friendSearch').value.trim().toLowerCase(); if(!f||f===myUsername) return; const u=await get(ref(db,'usernames/'+f)); if(!u.exists()){alert('اليوزر مش موجود');return} await set(ref(db,`friends/${f}/in/${myUsername}`),{from:myUsername}); await set(ref(db,`friends/${myUsername}/out/${f}`),{to:f}); alert('اتبعتلة ✅');}
-window.showFriendsTab=async function(type){const res=document.getElementById('friendsResult'); if(type==='in'){onValue(ref(db,`friends/${myUsername}/in`),snap=>{res.innerHTML='<h4>📩 اللي جايلك</h4>'; if(!snap.exists()){res.innerHTML+='<p style="color:#8a90a8">مفيش طلبات</p>';return} snap.forEach(s=>{res.innerHTML+=`<div class="card"><span>👤 ${s.key}</span><div><button class="btn" onclick="acceptFriend('${s.key}')">قبول</button> <button class="btn-del" onclick="rejectFriend('${s.key}')">رفض</button></div></div>`;});},{onlyOnce:true});} else if(type==='out'){onValue(ref(db,`friends/${myUsername}/out`),snap=>{res.innerHTML='<h4>📤 اللي بعته</h4>'; if(!snap.exists()){res.innerHTML+='<p style="color:#8a90a8">مبعتش حاجة</p>';return} snap.forEach(s=>{res.innerHTML+=`<div class="card"><span>👤 ${s.key}</span><span style="color:#8a90a8">مستني</span></div>`;});},{onlyOnce:true});} else {onValue(ref(db,`friends/${myUsername}/list`),snap=>{res.innerHTML='<h4>✅ اصحابي - دوس عشان خاص 🔥</h4>'; if(!snap.exists()){res.innerHTML+='<p style="color:#8a90a8">لسه مفيش اصحاب - ابعت طلبات</p>';return} snap.forEach(s=>{res.innerHTML+=`<div class="card" style="cursor:pointer" onclick="openPrivate('${s.key}')"><span>👤 ${s.key}</span><span style="color:#00ff88">💬 خاص</span></div>`;});},{onlyOnce:true});}}
-window.acceptFriend=async function(name){await set(ref(db,`friends/${myUsername}/list/${name}`),{since:Date.now()}); await set(ref(db,`friends/${name}/list/${myUsername}`),{since:Date.now()}); await remove(ref(db,`friends/${myUsername}/in/${name}`)); await remove(ref(db,`friends/${name}/out/${myUsername}`)); showFriendsTab('friends');}
-window.rejectFriend=async function(name){await remove(ref(db,`friends/${myUsername}/in/${name}`)); await remove(ref(db,`friends/${name}/out/${myUsername}`)); showFriendsTab('in');}
-let curPrivate=null;
-window.openPrivate=function(name){curPrivate=[myUsername,name].sort().join('_SEIF_'); document.getElementById('privateWith').innerText=name+' 🔒 خاص'; document.getElementById('privateBox').style.display='flex'; onValue(ref(db,'private/'+curPrivate),snap=>{const box=document.getElementById('privateMsgs'); box.innerHTML=''; snap.forEach(m=>{let d=m.val(); box.innerHTML+=`<div style="padding:8px 12px;border-radius:10px;max-width:80%;${d.from===myUsername?'background:#5865f2;align-self:flex-start':'background:#222b45;align-self:flex-end'}">${d.text}</div>`;}); box.scrollTop=box.scrollHeight;});}
-window.closePrivate=function(){document.getElementById('privateBox').style.display='none';}
-window.sendPrivate=async function(){let t=document.getElementById('privateText').value.trim(); if(!t||!curPrivate) return; await push(ref(db,'private/'+curPrivate),{from:myUsername,text:t}); document.getElementById('privateText').value='';}
+function checkLogin() {
+  const modal = document.getElementById("loginModal");
+  const top = document.getElementById("topUser");
+
+  if (myUsername && validUsername(myUsername)) {
+    modal.classList.remove("active");
+    document.getElementById("showUser").textContent = "👤 " + myUsername;
+    document.getElementById("myNameShow").textContent = myUsername;
+    top.textContent = "مرحبا في موقع المطور " + myUsername;
+  } else {
+    myUsername = null;
+    modal.classList.add("active");
+    top.textContent = "مرحبا في موقع المطور seif";
+  }
+}
+checkLogin();
+
+window.doLogin = async function() {
+  const input = document.getElementById("loginInput");
+  const msg = document.getElementById("loginMsg");
+  const name = input.value.trim().toLowerCase();
+
+  if (!validUsername(name)) {
+    msg.textContent = "استخدم 3 إلى 15 حرفًا إنجليزيًا أو رقمًا أو _";
+    return;
+  }
+
+  msg.textContent = "جاري التحقق...";
+
+  try {
+    let deviceId = localStorage.getItem("myDeviceId");
+    if (!deviceId) {
+      deviceId = crypto.randomUUID
+        ? crypto.randomUUID()
+        : Date.now() + "_" + Math.random().toString(36).slice(2);
+      localStorage.setItem("myDeviceId", deviceId);
+    }
+
+    const usernameRef = ref(db, "usernames/" + name);
+    const result = await runTransaction(usernameRef, current => {
+      if (current === null || current === deviceId) return deviceId;
+      return;
+    });
+
+    if (!result.committed) {
+      msg.textContent = "اليوزر ده مستخدم بالفعل";
+      return;
+    }
+
+    myUsername = name;
+    localStorage.setItem("myUsername", name);
+    msg.textContent = "";
+    checkLogin();
+  } catch (error) {
+    console.error(error);
+    msg.textContent = "حصل خطأ في الاتصال. جرّب تاني";
+  }
+};
+
+function roomHTML(room) {
+  const joined = roomMemberCount(room);
+  const max = Math.min(15, Math.max(2, Number(room.max) || 15));
+  const full = joined >= max;
+  const isMember = room.joinedBy?.[myUsername] === true;
+  const safeId = escapeHTML(room._id);
+  const safeGame = escapeHTML(room.game);
+  const safeOwner = escapeHTML(room.owner);
+  const safeDesc = escapeHTML(room.desc || "");
+  const safeLink = validRoomURL(String(room.link || ""))
+    ? String(room.link || "")
+    : "";
+
+  return `
+    <div class="room ${full ? "full" : ""}">
+      <div style="display:flex;justify-content:space-between;width:100%">
+        <div style="text-align:right">
+          <b>${safeGame} <span class="countBadge">${joined}/${max}</span></b>
+          ${full ? "🔒 مقفول" : "🟢 فاضي"}<br>
+          <small>صاحبها: ${safeOwner}</small>
+          <p style="color:#8a90a8;font-size:12px">${safeDesc}</p>
+          ${safeLink
+            ? `<a href="${escapeHTML(safeLink)}" target="_blank" rel="noopener noreferrer" style="color:#5865f2">🔗 لينك</a>`
+            : ""}
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <button class="btn" ${full && !isMember ? "disabled" : ""}
+            onclick="joinRoom('${safeId}')">
+            ${isMember ? "خروج" : "دخول"}
+          </button>
+          ${room.owner === myUsername
+            ? `<button class="btn-del" onclick="deleteRoom('${safeId}')">🗑️</button>`
+            : ""}
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderRooms(list = rooms) {
+  const target = document.getElementById("roomsList");
+  if (!list.length) {
+    target.innerHTML =
+      '<div style="text-align:center;padding:30px;color:#8a90a8">مفيش رومات</div>';
+    return;
+  }
+  target.innerHTML = list.map(roomHTML).join("");
+}
+
+window.showRoomsForGame = function(game) {
+  window.openTab("rooms");
+  const filtered = rooms.filter(room => room.game === game);
+  if (filtered.length) {
+    renderRooms(filtered);
+  } else {
+    const target = document.getElementById("roomsList");
+    target.innerHTML = "";
+    const message = document.createElement("div");
+    message.style.cssText =
+      "text-align:center;padding:30px;color:#8a90a8";
+    message.append(document.createTextNode("مفيش رومات لـ " + game));
+
+    const button = document.createElement("button");
+    button.className = "btn";
+    button.style.marginTop = "10px";
+    button.textContent = "اعمل اول روم";
+    button.onclick = window.openForm;
+
+    message.appendChild(document.createElement("br"));
+    message.appendChild(button);
+    target.appendChild(message);
+  }
+};
+
+window.openTab = function(name) {
+  document.querySelectorAll(".section").forEach(section =>
+    section.classList.remove("active-sec")
+  );
+  document.querySelectorAll(".tabs div").forEach(tab =>
+    tab.classList.remove("active")
+  );
+
+  document.getElementById("sec-" + name).classList.add("active-sec");
+  document.getElementById("tb-" + name).classList.add("active");
+
+  if (name === "friends") window.showFriendsTab("friends");
+  if (name === "rooms") renderRooms();
+};
+
+window.openForm = function() {
+  if (!myUsername) return alert("سجل دخول الأول");
+  document.getElementById("modal").classList.add("active");
+};
+
+window.closeForm = function() {
+  document.getElementById("modal").classList.remove("active");
+};
+
+onValue(ref(db, "rooms"), snapshot => {
+  rooms = [];
+  snapshot.forEach(child => {
+    const room = child.val();
+    if (!room || typeof room !== "object") return;
+    room._id = child.key;
+    rooms.push(room);
+  });
+
+  if (document.getElementById("sec-rooms").classList.contains("active-sec")) {
+    renderRooms();
+  }
+}, error => {
+  console.error("Rooms listener:", error);
+});
+
+window.saveRoom = async function() {
+  if (!myUsername) return alert("سجل دخول الأول");
+
+  const game = document.getElementById("f-game").value;
+  const max = Number(document.getElementById("f-count").value);
+  const desc = document.getElementById("f-desc").value.trim();
+  const link = document.getElementById("f-link").value.trim();
+
+  if (!allGames.includes(game)) return alert("اختار لعبة صحيحة");
+  if (!Number.isInteger(max) || max < 2 || max > 15) {
+    return alert("عدد اللاعبين لازم يكون من 2 إلى 15");
+  }
+  if (!validRoomURL(link)) {
+    return alert("اكتب رابط صحيح يبدأ بـ https:// أو http://");
+  }
+
+  try {
+    const roomRef = push(ref(db, "rooms"));
+    await set(roomRef, {
+      game,
+      max,
+      joined: 1,
+      desc,
+      link,
+      owner: myUsername,
+      joinedBy: { [myUsername]: true },
+      createdAt: Date.now()
+    });
+
+    document.getElementById("f-desc").value = "";
+    document.getElementById("f-link").value = "";
+    closeForm();
+    openTab("rooms");
+  } catch (error) {
+    console.error(error);
+    alert("تعذر إنشاء الروم. راجع اتصالك وصلاحيات Firebase");
+  }
+};
+
+window.joinRoom = async function(id) {
+  if (!myUsername) return alert("سجل دخول الأول");
+
+  const roomRef = ref(db, "rooms/" + id);
+
+  try {
+    const result = await runTransaction(roomRef, room => {
+      if (!room) return;
+
+      if (!room.joinedBy || typeof room.joinedBy !== "object") {
+        room.joinedBy = {};
+      }
+
+      const alreadyJoined = room.joinedBy[myUsername] === true;
+      const count = roomMemberCount(room);
+      const max = Math.min(15, Math.max(2, Number(room.max) || 15));
+
+      if (alreadyJoined) {
+        delete room.joinedBy[myUsername];
+      } else {
+        if (count >= max) return;
+        room.joinedBy[myUsername] = true;
+      }
+
+      room.joined = roomMemberCount(room);
+      return room;
+    });
+
+    if (!result.committed) {
+      alert("تعذر تغيير العضوية؛ ربما الروم اتغيرت أو امتلأت");
+    }
+  } catch (error) {
+    console.error(error);
+    alert("حصل خطأ أثناء دخول الروم");
+  }
+};
+
+window.deleteRoom = async function(id) {
+  if (!myUsername) return alert("سجل دخول الأول");
+
+  try {
+    const snapshot = await get(ref(db, "rooms/" + id));
+    if (!snapshot.exists()) return alert("الروم مش موجودة");
+
+    if (snapshot.val().owner !== myUsername) {
+      return alert("صاحب الروم فقط يقدر يحذفها");
+    }
+
+    if (!confirm("متأكد إنك عايز تحذف الروم؟")) return;
+    await remove(ref(db, "rooms/" + id));
+  } catch (error) {
+    console.error(error);
+    alert("تعذر حذف الروم");
+  }
+};
+
+// الدردشة العامة: بناء الرسائل باستخدام textContent يمنع تفسيرها كـ HTML.
+onValue(ref(db, "chat"), snapshot => {
+  const box = document.getElementById("chatList");
+  box.replaceChildren();
+
+  snapshot.forEach(child => {
+    const data = child.val() || {};
+    const msg = document.createElement("div");
+    msg.className = "msg";
+
+    const user = document.createElement("b");
+    user.textContent = String(data.user || "مستخدم") + ": ";
+
+    msg.append(user, document.createTextNode(String(data.text || "")));
+    box.appendChild(msg);
+  });
+
+  box.scrollTop = box.scrollHeight;
+}, error => console.error("Chat listener:", error));
+
+window.sendChat = async function() {
+  if (!myUsername) return alert("سجل دخول الأول");
+
+  const input = document.getElementById("chatText");
+  const text = input.value.trim();
+  if (!text) return;
+  if (text.length > 2000) return alert("الرسالة طويلة جدًا");
+
+  try {
+    await push(ref(db, "chat"), {
+      user: myUsername,
+      text,
+      createdAt: Date.now()
+    });
+    input.value = "";
+  } catch (error) {
+    console.error(error);
+    alert("تعذر إرسال الرسالة");
+  }
+};
+
+window.sendFriendReq = async function() {
+  if (!myUsername) return alert("سجل دخول الأول");
+
+  const field = document.getElementById("friendSearch");
+  const friend = field.value.trim().toLowerCase();
+
+  if (!validUsername(friend)) {
+    return alert("اكتب يوزر صحيح");
+  }
+  if (friend === myUsername) return alert("مينفعش تبعت طلب لنفسك");
+
+  try {
+    const userSnapshot = await get(ref(db, "usernames/" + friend));
+    if (!userSnapshot.exists()) return alert("اليوزر مش موجود");
+
+    const existing = await get(ref(db, `friends/${myUsername}/list/${friend}`));
+    if (existing.exists()) return alert("ده موجود بالفعل في قائمة أصدقائك");
+
+    const pending = await get(ref(db, `friends/${friend}/in/${myUsername}`));
+    if (pending.exists()) return alert("أنت باعت طلب قبل كده");
+
+    await set(ref(db, `friends/${friend}/in/${myUsername}`), {
+      from: myUsername,
+      createdAt: Date.now()
+    });
+    await set(ref(db, `friends/${myUsername}/out/${friend}`), {
+      to: friend,
+      createdAt: Date.now()
+    });
+
+    field.value = "";
+    alert("اتبعتله ✅");
+  } catch (error) {
+    console.error(error);
+    alert("تعذر إرسال طلب الصداقة");
+  }
+};
+
+window.showFriendsTab = async function(type) {
+  const result = document.getElementById("friendsResult");
+  result.replaceChildren();
+
+  if (!myUsername) {
+    result.textContent = "سجل دخول الأول";
+    return;
+  }
+
+  const titles = {
+    in: "📩 اللي جايلك",
+    out: "📤 اللي بعته",
+    friends: "✅ اصحابي - دوس عشان خاص 🔥"
+  };
+
+  const heading = document.createElement("h4");
+  heading.textContent = titles[type] || titles.friends;
+  result.appendChild(heading);
+
+  try {
+    const path = type === "in" ? "in" : type === "out" ? "out" : "list";
+    const snapshot = await get(ref(db, `friends/${myUsername}/${path}`));
+
+    if (!snapshot.exists()) {
+      const empty = document.createElement("p");
+      empty.style.color = "#8a90a8";
+      empty.textContent = type === "out"
+        ? "مبعتش حاجة"
+        : type === "in"
+          ? "مفيش طلبات"
+          : "لسه مفيش اصحاب - ابعت طلبات";
+      result.appendChild(empty);
+      return;
+    }
+
+    snapshot.forEach(child => {
+      const name = child.key;
+      const card = document.createElement("div");
+      card.className = "card";
+
+      const label = document.createElement("span");
+      label.textContent = "👤 " + name;
+      card.appendChild(label);
+
+      if (type === "in") {
+        const actions = document.createElement("div");
+        const accept = document.createElement("button");
+        accept.className = "btn";
+        accept.textContent = "قبول";
+        accept.onclick = () => window.acceptFriend(name);
+
+        const reject = document.createElement("button");
+        reject.className = "btn-del";
+        reject.textContent = "رفض";
+        reject.onclick = () => window.rejectFriend(name);
+
+        actions.append(accept, document.createTextNode(" "), reject);
+        card.appendChild(actions);
+      } else if (type === "out") {
+        const status = document.createElement("span");
+        status.style.color = "#8a90a8";
+        status.textContent = "مستني";
+        card.appendChild(status);
+      } else {
+        card.style.cursor = "pointer";
+        const chat = document.createElement("span");
+        chat.style.color = "#00ff88";
+        chat.textContent = "💬 خاص";
+        card.appendChild(chat);
+        card.onclick = () => window.openPrivate(name);
+      }
+
+      result.appendChild(card);
+    });
+  } catch (error) {
+    console.error(error);
+    result.appendChild(document.createTextNode("تعذر تحميل قائمة الأصدقاء"));
+  }
+};
+
+window.acceptFriend = async function(name) {
+  if (!myUsername || !validUsername(name)) return;
+
+  try {
+    const request = await get(ref(db, `friends/${myUsername}/in/${name}`));
+    if (!request.exists()) return alert("طلب الصداقة مش موجود");
+
+    const updates = [
+      set(ref(db, `friends/${myUsername}/list/${name}`), { since: Date.now() }),
+      set(ref(db, `friends/${name}/list/${myUsername}`), { since: Date.now() }),
+      remove(ref(db, `friends/${myUsername}/in/${name}`)),
+      remove(ref(db, `friends/${name}/out/${myUsername}`))
+    ];
+
+    await Promise.all(updates);
+    window.showFriendsTab("friends");
+  } catch (error) {
+    console.error(error);
+    alert("تعذر قبول الطلب");
+  }
+};
+
+window.rejectFriend = async function(name) {
+  if (!myUsername || !validUsername(name)) return;
+
+  try {
+    await Promise.all([
+      remove(ref(db, `friends/${myUsername}/in/${name}`)),
+      remove(ref(db, `friends/${name}/out/${myUsername}`))
+    ]);
+    window.showFriendsTab("in");
+  } catch (error) {
+    console.error(error);
+    alert("تعذر رفض الطلب");
+  }
+};
+
+window.openPrivate = async function(name) {
+  if (!myUsername || !validUsername(name) || name === myUsername) return;
+
+  try {
+    const friendship = await get(ref(db, `friends/${myUsername}/list/${name}`));
+    if (!friendship.exists()) {
+      return alert("الشات الخاص متاح للأصدقاء فقط");
+    }
+
+    if (privateListenerRef && privateListener) {
+      off(privateListenerRef, "value", privateListener);
+    }
+
+    curPrivate = [myUsername, name].sort().join("_SEIF_");
+    document.getElementById("privateWith").textContent = name + " 🔒 خاص";
+    document.getElementById("privateBox").style.display = "flex";
+
+    privateListenerRef = ref(db, "private/" + curPrivate);
+    privateListener = snapshot => {
+      const box = document.getElementById("privateMsgs");
+      box.replaceChildren();
+
+      snapshot.forEach(child => {
+        const data = child.val() || {};
+        const message = document.createElement("div");
+        message.style.cssText =
+          "padding:8px 12px;border-radius:10px;max-width:80%;";
+
+        if (data.from === myUsername) {
+          message.style.background = "#5865f2";
+          message.style.alignSelf = "flex-start";
+        } else {
+          message.style.background = "#222b45";
+          message.style.alignSelf = "flex-end";
+        }
+
+        message.textContent = String(data.text || "");
+        box.appendChild(message);
+      });
+
+      box.scrollTop = box.scrollHeight;
+    };
+
+    onValue(privateListenerRef, privateListener, error => {
+      console.error("Private chat listener:", error);
+    });
+  } catch (error) {
+    console.error(error);
+    alert("تعذر فتح الشات الخاص");
+  }
+};
+
+window.closePrivate = function() {
+  if (privateListenerRef && privateListener) {
+    off(privateListenerRef, "value", privateListener);
+  }
+
+  privateListenerRef = null;
+  privateListener = null;
+  curPrivate = null;
+  document.getElementById("privateBox").style.display = "none";
+  document.getElementById("privateMsgs").replaceChildren();
+};
+
+window.sendPrivate = async function() {
+  if (!myUsername || !curPrivate) return;
+
+  const text = document.getElementById("privateText").value.trim();
+  if (!text) return;
+  if (text.length > 2000) return alert("الرسالة طويلة جدًا");
+
+  try {
+    await push(ref(db, "private/" + curPrivate), {
+      from: myUsername,
+      text,
+      createdAt: Date.now()
+    });
+    document.getElementById("privateText").value = "";
+  } catch (error) {
+    console.error(error);
+    alert("تعذر إرسال الرسالة");
+  }
+};
+
+// دعم إرسال الرسائل بزر Enter.
+document.getElementById("chatText").addEventListener("keydown", event => {
+  if (event.key === "Enter") window.sendChat();
+});
+document.getElementById("privateText").addEventListener("keydown", event => {
+  if (event.key === "Enter") window.sendPrivate();
+});
+document.getElementById("loginInput").addEventListener("keydown", event => {
+  if (event.key === "Enter") window.doLogin();
+});
 </script>
 </body>
-</html>
+  </html>
