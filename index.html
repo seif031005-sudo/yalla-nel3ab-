@@ -6,18 +6,18 @@
 <style>
 *{box-sizing:border-box} body{background:#0f0f0f;color:#fff;font-family:sans-serif;margin:0}
 .top{background:#00ff88;color:#111;text-align:center;padding:14px;font-weight:bold;font-size:18px;border-radius:0 0 14px 14px;margin:0 10px}
-.tabs{display:flex;justify-content:space-between;background:#1a1a1a;padding:10px 5px;margin-top:10px;overflow:auto}
+.tabs{display:flex;justify-content:space-between;background:#1a1a1a;padding:10px 5px;margin-top:10px}
 .tabs div{padding:10px;cursor:pointer;color:#888;white-space:nowrap}
 .tabs .active{color:#00ff88;border-bottom:3px solid #00ff88}
 .search{border:2px solid #666;margin:15px;border-radius:14px;padding:12px;background:#111}
 .search input{width:100%;background:transparent;border:none;color:#fff;outline:none;font-size:16px;text-align:right}
 .card{background:#1e1e1e;margin:10px 12px;padding:14px;border-radius:14px;display:flex;justify-content:space-between;align-items:center}
 .btn{background:#00ff88;color:#111;padding:10px 22px;border-radius:10px;border:none;font-weight:bold;font-size:16px;cursor:pointer}
+.btn-del{background:#ff3b3b;color:#fff;border:none;padding:10px 14px;border-radius:10px;margin-right:6px;cursor:pointer}
 .section{display:none}.active-sec{display:block}
 .room{background:#1e1e1e;margin:10px 12px;padding:15px;border-radius:12px;border-right:4px solid #00ff88;display:flex;justify-content:space-between;align-items:center}
 .footer{text-align:center;padding:25px;background:#151515;margin-top:20px}
 .footer a{color:#00ff88;margin:0 8px;text-decoration:none}
-.chat-bubble{position:fixed;bottom:20px;left:20px;background:#00ff88;width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:30px;cursor:pointer}
 </style>
 </head>
 <body>
@@ -37,16 +37,16 @@
 <div id="sec-rooms" class="section">
 <div style="padding:15px"><button class="btn" onclick="createRoom()">+ انشاء غرفة جديدة</button></div>
 <div id="roomsList"></div>
+<div id="joinedMsg"></div>
 </div>
 
-<div id="sec-chat" class="section"><div style="padding:40px;text-align:center;color:#777">الشات العام - قريبا هتقدر تتكلم مع كل اللاعبين هنا 💬</div></div>
-<div id="sec-friends" class="section"><div style="padding:40px;text-align:center;color:#777">الاصدقاء - ضيف صحابك والعبوا سوا 👥</div></div>
+<div id="sec-chat" class="section"><div style="padding:40px;text-align:center;color:#777">الشات العام - قريبا 💬</div></div>
+<div id="sec-friends" class="section"><div style="padding:40px;text-align:center;color:#777">الاصدقاء - ضيف صحابك 👥</div></div>
 
 <div class="footer">
 <a href="privacy.html">سياسة الخصوصية</a> | <a href="contact.html">اتصل بنا</a> | <a href="about.html">من نحن</a>
-<p style="color:#555;font-size:12px;margin-top:12px">جميع الحقوق محفوظة 2026 - يلا نلعب</p>
+<p style="color:#555;font-size:12px;margin-top:12px">جميع الحقوق محفوظة 2026</p>
 </div>
-<div class="chat-bubble" onclick="alert('الدعم الفني: ابعتلنا على واتساب')">💬</div>
 
 <script>
 const allGames=["XO","Ludo","Domino","Chess","ببجي","Free Fire","Among Us","PUBG Mobile","FIFA","Blood Strike","Call of Duty Mobile","PUBG Lite","Free Fire MAX","Warzone Mobile","Fortnite","Apex Legends","Farlight 84","Standoff 2","Critical Ops","Modern Ops","Shadowgun","Pixel Gun 3D","Guns of Boom","Bullet Force","Warface","Dead Trigger 2","Cover Fire","Sniper 3D","Modern Combat 5","NOVA 3","Battle Prime","MaskGun","Infinity Ops","War Robots","Mech Arena","World of Tanks","Brawl Stars","Zooba","T3 Arena","Valorant Mobile","Rainbow Six Mobile","CS Mobile","Knives Out","Cyber Hunter","ScarFall","Hopeless Land","Garena Contra","ZombsRoyale","Lords Mobile","Clash of Clans","Clash Royale","Mobile Legends","Arena of Valor","Wild Rift","Arena Breakout","Lost Light","Undawn","Delta Force Mobile","State of Survival","Last Day on Earth","GTA San","Minecraft","Roblox","8 Ball Pool","Fifa Mobile","eFootball 26","Dream League","Top Eleven","Asphalt 9","Need for Speed","Hill Climb","Subway Surfers","Temple Run","Hay Day","World War Heroes","Gun War","Sniper Strike","Mini Militia","BombSquad","Stick War","Shadow Fight 4","Mortal Kombat","Dragon Ball Legends","BGMI","Blood Strike Mena","Call of Duty Warzone","Ghost Recon","Max Payne","GTA Vice City","Gangstar Vegas","Dead Effect 2","Unkilled","Brothers in Arms 3","Deer Hunter","Hunting Clash","Special Forces Group 2","Soldiers Inc","Frontline Commando","Overkill 3","Blitz Brigade","Six Guns","Mad Bullets","Western Gunfight","Dead Target","Into The Dead 2","Hitman Sniper","Sniper Fury","Modern Combat 4","NOVA Legacy","Tacticool","Warpath","War Thunder Mobile","Brawlhalla","Creative Destruction","Battlelands Royale","FortCraft","Pixel's Unknown","Clash of War","Warlings 2","Stickman Warriors","Shadow Fight 3","Injustice 2","Naruto Storm","One Piece","My Hero Academia","New State Mobile","Black Ops Mobile","Sniper Ghost Warrior","Hitman Blood Money","GTA 3","Bully","Gangstar New Orleans","Respawnables","Guns and Spurs 2","Deer Hunter Classic","Archery King","WW2 Battle Front","Sniper Arena","Major Mayhem 2","Killer Bean","Candy Crush","Ludo King","CarX Drift","Real Cricket","WCC3","Score Hero","Among Us 2","Free Fire India","PUBG KR","CODM Garena","LifeAfter","Eternal Evolution","Doom Eternal Mobile","PUBG Mobile Lite 2","Blood Strike Shutter Island"];
@@ -62,8 +62,29 @@ document.getElementById('sec-'+n).classList.add('active-sec');
 document.getElementById('tb-'+n).classList.add('active');
 if(n=='rooms') loadRooms();
 }
-function loadRooms(){document.getElementById('roomsList').innerHTML=`<div class="room"><span>🔥 روم Blood Strike - 9/12</span><button class="btn">دخول</button></div><div class="room"><span>⚔️ روم PUBG - 5/10</span><button class="btn">دخول</button></div><div class="room"><span>💥 روم Free Fire - 12/12 ممتلئ</span><button class="btn">دخول</button></div>`}
-function createRoom(){let name=prompt("اسم الروم:");if(name){document.getElementById('roomsList').innerHTML+=`<div class="room"><span>🎮 ${name}</span><button class="btn">دخول</button></div>`;}}
+function loadRooms(){
+document.getElementById('roomsList').innerHTML=`
+<div class="room" id="room-1"><span>🔥 روم Blood Strike - 9/12</span><div><button class="btn" onclick="joinRoom('Blood Strike')">دخول</button> <button class="btn-del" onclick="deleteRoom(1)">🗑️ حذف</button></div></div>
+<div class="room" id="room-2"><span>⚔️ روم PUBG - 5/10</span><div><button class="btn" onclick="joinRoom('PUBG')">دخول</button> <button class="btn-del" onclick="deleteRoom(2)">🗑️ حذف</button></div></div>
+<div class="room" id="room-3"><span>💥 روم Free Fire</span><div><button class="btn" onclick="joinRoom('Free Fire')">دخول</button> <button class="btn-del" onclick="deleteRoom(3)">🗑️ حذف</button></div></div>`;
+}
+function joinRoom(name){
+let nick=prompt("اسمك عشان تدخل روم "+name+":");
+if(nick){document.getElementById('joinedMsg').innerHTML=`<div style="background:#00ff88;color:#111;padding:12px;margin:12px;border-radius:10px;text-align:center">✅ اهلا ${nick} دخلت روم ${name}</div>`;}
+}
+function createRoom(){
+let name=prompt("اسم الروم الجديد:");
+if(name && name.trim()!=""){
+let id=Date.now();
+document.getElementById('roomsList').innerHTML+=`<div class="room" id="room-${id}"><span>🎮 ${name}</span><div><button class="btn" onclick="joinRoom('${name}')">دخول</button> <button class="btn-del" onclick="deleteRoom(${id})">🗑️ حذف</button></div></div>`;
+}
+}
+function deleteRoom(id){
+if(confirm("متأكد عايز تحذف الروم ده؟")){
+let el=document.getElementById('room-'+id);
+if(el) el.remove();
+}
+}
 </script>
 </body>
 </html>
