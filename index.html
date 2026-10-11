@@ -8,7 +8,7 @@
 .top{background:#151b2e;text-align:center;padding:16px;font-weight:bold;border-bottom:2px solid #5865f2}
 .tabs{display:flex;justify-content:space-around;background:#151b2e;padding:8px 0}
 .tabs div{padding:12px 15px;cursor:pointer;color:#7a8194;border-radius:10px}
-.tabs.active{color:#fff;background:#222b45}
+.tabs div.active{color:#fff;background:#222b45}
 .searchBox{background:#151b2e;margin:15px;border-radius:14px;padding:4px}
 .searchBox input{width:100%;background:#0f1424;border:1px solid #222b45;color:#fff;padding:14px;border-radius:12px;outline:none}
 .card{background:#151b2e;margin:10px 12px;padding:14px;border-radius:14px;display:flex;justify-content:space-between;align-items:center;border:1px solid #1e2742}
@@ -19,7 +19,7 @@
 .section{display:none}.active-sec{display:block}
 .room{background:#151b2e;margin:12px;padding:15px;border-radius:14px;border:1px solid #1e2742;border-right:4px solid #5865f2}
 .room.full{border-right-color:#ff3b5c;opacity:0.7}
-.modal{position:fixed;top:0;right:0;left:0;bottom:0;background:rgba(5,8,20,0.85);display:none;align-items:center;justify-content:center;z-index:99}
+.modal{position:fixed;top:0;right:0;left:0;bottom:0;background:rgba(5,8,20,0.92);display:none;align-items:center;justify-content:center;z-index:999}
 .modal.active{display:flex}
 .box{background:#151b2e;padding:20px;border-radius:16px;width:92%;max-width:400px;border:1px solid #222b45}
 .box input,.box select,.box textarea{width:100%;padding:12px;margin:8px 0;background:#0f1424;border:1px solid #222b45;color:#fff;border-radius:10px}
@@ -28,49 +28,72 @@
 .chatInput input{flex:1;padding:12px;background:#0f1424;border:1px solid #222b45;color:#fff;border-radius:10px}
 .friendBox{background:#151b2e;margin:15px;padding:20px;border-radius:14px;border:1px solid #1e2742;text-align:center}
 .countBadge{background:#000;border:1px solid #5865f2;padding:4px 10px;border-radius:20px;font-size:12px}
-.countBadge.full{background:#ff3b5c}
+.loginBox{text-align:center}
+.userBadge{background:#222b45;padding:8px 14px;border-radius:20px;font-size:13px;border:1px solid #5865f2}
 </style>
 </head>
 <body>
-<div class="top">seif - يلا نلعب 🎮 🔵 الحد الاقصى 15</div>
+<div class="top"><span id="topUser">seif - يلا نلعب 🎮</span> - اخره 15</div>
+
+<div id="loginModal" class="modal active">
+<div class="box loginBox">
+<h2>🎮 اهلا بيك!</h2>
+<p style="color:#8a90a8">اختار يوزر نيم مميز ليك - مينفعش يتكرر</p>
+<input id="loginInput" placeholder="مثلا seif2026" maxlength="15">
+<button class="btn-full" onclick="doLogin()">دخول 🚀</button>
+<p id="loginMsg" style="color:#ff3b5c"></p>
+</div>
+</div>
+
 <div class="tabs">
 <div onclick="openTab('friends')" id="tb-friends">👥 الاصدقاء</div>
 <div onclick="openTab('chat')" id="tb-chat">دردشة</div>
 <div onclick="openTab('rooms')" id="tb-rooms">الرومات</div>
 <div onclick="openTab('games')" id="tb-games" class="active">الالعاب</div>
 </div>
+
 <div id="sec-games" class="section active-sec">
+<div style="padding:10px;text-align:left"><span class="userBadge" id="showUser"></span></div>
 <div class="searchBox"><input id="q" onkeyup="doSearch()" placeholder="ابحث عن لعبة..."></div>
 <div id="searchRoomsResult"></div>
 <div id="gamesList"></div>
 </div>
+
 <div id="sec-rooms" class="section">
 <div style="padding:10px"><button class="btn-full" onclick="openForm()">+ اعمل روم</button></div>
-<div id="roomsList">تحميل...</div>
+<div id="roomsList"></div>
 </div>
+
 <div id="sec-chat" class="section">
 <div id="chatList" class="chatBox"></div>
-<div class="chatInput"><input id="chatName" placeholder="اسمك"><input id="chatText" placeholder="اكتب..."><button class="btn" onclick="sendChat()">ارسال</button></div>
+<div class="chatInput"><input id="chatText" placeholder="اكتب..."><button class="btn" onclick="sendChat()">ارسال</button></div>
 </div>
+
 <div id="sec-friends" class="section">
 <div class="friendBox">
 <div style="font-weight:bold">👥 ابعت طلب صداقة</div>
-<input id="myName" placeholder="اسمك انت">
-<input id="friendSearch" placeholder="اسم صاحبك">
+<p style="color:#8a90a8;font-size:13px">انت: <b id="myNameShow" style="color:#5865f2"></b></p>
+<input id="friendSearch" placeholder="اكتب يوزر صاحبك">
 <button class="btn-full" onclick="sendFriendReq()">ابعت طلب صداقة ✅</button>
+<div style="display:flex;gap:10px;margin-top:15px">
+<button class="btn" style="flex:1;background:#222b45" onclick="showFriendsTab('in')">📩 اللي جايلك</button>
+<button class="btn" style="flex:1;background:#222b45" onclick="showFriendsTab('out')">📤 اللي بعته</button>
+</div>
 <div id="friendsResult" style="margin-top:15px;text-align:right"></div>
 </div>
 </div>
+
 <div id="modal" class="modal" onclick="if(event.target==this) closeForm()">
 <div class="box">
-<h3 style="text-align:center">🎮 انشاء روم - اخره 15</h3>
+<h3 style="text-align:center">🎮 انشاء روم - اخره 15 بس</h3>
 <label>اللعبة</label><select id="f-game"></select>
-<label>محتاج كام؟ (2 - 15)</label><input type="number" id="f-count" value="4" min="2" max="15">
+<label>محتاج كام؟ (2-15)</label><input type="number" id="f-count" value="4" min="2" max="15">
 <label>الوصف</label><textarea id="f-desc"></textarea>
 <label>لينك التيم</label><input id="f-link" placeholder="https://...">
 <div style="display:flex;gap:10px;margin-top:15px"><button class="btn" style="flex:1" onclick="saveRoom()">انشاء</button><button class="btn-del" style="flex:1" onclick="closeForm()">الغاء</button></div>
 </div>
 </div>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getDatabase, ref, onValue, runTransaction, push, set, get, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
@@ -86,38 +109,98 @@ const firebaseConfig = {
 };
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
-const allGames=["Blood Strike","PUBG Mobile","Free Fire","Call of Duty Mobile","Fortnite","Valorant Mobile","Minecraft","Roblox","FIFA","eFootball 26","Asphalt 9","8 Ball Pool","Among Us","Brawl Stars","Clash of Clans","Mobile Legends","XO","Ludo","Domino","Chess","Standoff 2","Critical Ops","Farlight 84","War Robots"];
+
+let myUsername = localStorage.getItem("myUsername");
+let currentFriendTab = 'in';
+const allGames=["Blood Strike","PUBG Mobile","Free Fire","Call of Duty Mobile","Fortnite","Valorant Mobile","Minecraft","Roblox","FIFA","eFootball 26","Asphalt 9","8 Ball Pool","Among Us","Brawl Stars","Clash of Clans","Mobile Legends","XO","Ludo","Domino","Chess"];
 let rooms=[];
 const gl=document.getElementById('gamesList');
 const sel=document.getElementById('f-game'); allGames.forEach(g=>{sel.innerHTML+=`<option>${g}</option>`});
 function renderGames(arr){gl.innerHTML=""; arr.forEach(g=>{gl.innerHTML+=`<div class="card"><button class="btn" onclick="showRoomsForGame('${g}')">شوف الرومات</button><span>${g}</span></div>`});}
 renderGames(allGames);
-function roomHTML(r){const full=r.joined>=r.max;return `<div class="room ${full?'full':''}"><div style="display:flex;justify-content:space-between"><div><b>🎮 ${r.game} <span class="countBadge ${full?'full':''}">${r.joined}/${r.max}</span></b> ${full?'🔒 مقفول':'🟢 مفتوح'}<p style="color:#8a90a8;font-size:13px">${r.desc||''}</p>${r.link?`<a href="${r.link}" target="_blank" style="color:#5865f2">🔗 لينك</a>`:''}</div><div><button class="btn" ${full?'disabled':''} onclick="joinRoom('${r._id}')">${full?'مقفل':'دخول'}</button><button class="btn-del" onclick="deleteRoom('${r._id}')">🗑️</button></div></div></div>`;}
+
+async function checkLogin(){
+ if(myUsername){
+   document.getElementById('loginModal').classList.remove('active');
+   document.getElementById('showUser').innerText='👤 '+myUsername;
+   document.getElementById('myNameShow').innerText=myUsername;
+   document.getElementById('topUser').innerText=myUsername+' - يلا نلعب 🎮';
+ } else {
+   document.getElementById('loginModal').classList.add('active');
+ }
+}
+checkLogin();
+
+window.doLogin = async function(){
+ let name = document.getElementById('loginInput').value.trim().toLowerCase();
+ let msg = document.getElementById('loginMsg');
+ if(name.length<3){msg.innerText='الاسم قصير اوي - 3 حروف على الاقل';return}
+ if(!/^[a-z0-9_]+$/.test(name)){msg.innerText='استخدم حروف انجليزي وارقام بس';return}
+ const snap = await get(ref(db,'usernames/'+name));
+ if(snap.exists()){
+   if(snap.val()!== localStorage.getItem('myDeviceId')){
+     msg.innerText='اليوزر ده متاخد جرب واحد تاني ❌';
+     return;
+   }
+ }
+ let deviceId = localStorage.getItem('myDeviceId') || Date.now()+''+Math.random();
+ localStorage.setItem('myDeviceId', deviceId);
+ await set(ref(db,'usernames/'+name), deviceId);
+ myUsername = name;
+ localStorage.setItem('myUsername', myUsername);
+ checkLogin();
+}
+
+function roomHTML(r){const full=r.joined>=r.max;return `<div class="room ${full?'full':''}"><div style="display:flex;justify-content:space-between"><div><b>🎮 ${r.game} <span class="countBadge">${r.joined}/${r.max}</span></b> ${full?'🔒 مقفول':'🟢'}<p style="color:#8a90a8;font-size:13px">${r.desc||''}</p>${r.link?`<a href="${r.link}" target="_blank" style="color:#5865f2">🔗 لينك</a>`:''}</div><div><button class="btn" ${full?'disabled':''} onclick="joinRoom('${r._id}')">${full?'مقفل':'دخول'}</button><button class="btn-del" onclick="deleteRoom('${r._id}')">🗑️</button></div></div></div>`;}
 window.doSearch=function(){let v=document.getElementById('q').value.toLowerCase();renderGames(allGames.filter(x=>x.toLowerCase().includes(v)));let f=rooms.filter(r=>r.game.toLowerCase().includes(v));document.getElementById('searchRoomsResult').innerHTML=v.length>1&&f.length?`<div style="margin:12px;padding:12px;background:#151b2e;border-radius:12px">${f.map(roomHTML).join('')}</div>`:"";}
-window.showRoomsForGame=function(g){openTab('rooms');let f=rooms.filter(r=>r.game===g);document.getElementById('roomsList').innerHTML=f.length?f.map(roomHTML).join(''):`<div style="text-align:center;padding:40px">مفيش رومات لـ ${g}<br><button class="btn-full" onclick="openForm()">اعمل اول روم</button></div>`;}
-window.openTab=function(n){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active-sec'));document.querySelectorAll('.tabs div').forEach(t=>t.classList.remove('active'));document.getElementById('sec-'+n).classList.add('active-sec');document.getElementById('tb-'+n).classList.add('active');}
+window.showRoomsForGame=function(g){openTab('rooms');let f=rooms.filter(r=>r.game===g);document.getElementById('roomsList').innerHTML=f.length?f.map(roomHTML).join(''):`<div style="text-align:center;padding:40px">مفيش رومات لـ ${g}</div>`;}
+window.openTab=function(n){if(!myUsername){checkLogin();return}document.querySelectorAll('.section').forEach(s=>s.classList.remove('active-sec'));document.querySelectorAll('.tabs div').forEach(t=>t.classList.remove('active'));document.getElementById('sec-'+n).classList.add('active-sec');document.getElementById('tb-'+n).classList.add('active');}
 window.openForm=function(){document.getElementById('modal').classList.add('active');}
 window.closeForm=function(){document.getElementById('modal').classList.remove('active');}
 window.saveRoom=async function(){
-  let game=document.getElementById('f-game').value,
-  max=parseInt(document.getElementById('f-count').value)||4,
-  desc=document.getElementById('f-desc').value,
-  link=document.getElementById('f-link').value;
-  if(max<2){alert("اقل حاجة 2");return}
-  if(max>15){alert("اقصى عدد هو 15 بس عشان المحنكين 😂");return}
-  const newRef=push(ref(db,'rooms'));
-  await set(newRef,{game,max,joined:1,desc,link,created:Date.now()});
-  closeForm();openTab('rooms');
+ let max=parseInt(document.getElementById('f-count').value)||4;
+ if(max<2||max>15){alert("اقصى عدد هو 15 بس عشان المحنكين 😂");return}
+ let game=document.getElementById('f-game').value,desc=document.getElementById('f-desc').value,link=document.getElementById('f-link').value;
+ const newRef=push(ref(db,'rooms'));
+ await set(newRef,{game,max,joined:1,desc,link,owner:myUsername,created:Date.now()});
+ closeForm();openTab('rooms');
 }
-onValue(ref(db,'rooms'),snap=>{const obj=snap.val()||{};rooms=Object.keys(obj).map(id=>({...obj[id],_id:id}));document.getElementById('roomsList').innerHTML=rooms.length?rooms.slice().reverse().map(roomHTML).join(''):`<div style="text-align:center;padding:60px">مفيش رومات لسه</div>`;doSearch();});
+onValue(ref(db,'rooms'),snap=>{const obj=snap.val()||{};rooms=Object.keys(obj).map(id=>({...obj[id],_id:id}));document.getElementById('roomsList').innerHTML=rooms.length?rooms.slice().reverse().map(roomHTML).join(''):`<div style="text-align:center;padding:60px">مفيش رومات</div>`;doSearch();});
 window.joinRoom=async function(id){const rref=ref(db,'rooms/'+id);const s=await get(rref);if(!s.exists())return;const r=s.val();if(r.joined>=r.max)return alert("الروم مقفول 15/15 🔒");const res=await runTransaction(ref(db,'rooms/'+id+'/joined'),c=>{if(c==null)return 1;if(c>=r.max)return;return c+1});if(!res.committed)alert("قفل خلاص 🔒");else if(r.link)window.open(r.link,'_blank');}
 window.deleteRoom=async function(id){if(confirm('تحذف؟'))await remove(ref(db,'rooms/'+id));}
-window.sendChat=async function(){let name=document.getElementById('chatName').value||'مجهول';let text=document.getElementById('chatText').value;if(!text.trim())return;await push(ref(db,'chats'),{name,text,time:Date.now()});document.getElementById('chatText').value="";localStorage.setItem('chatName',name);}
-document.getElementById('chatName').value=localStorage.getItem('chatName')||'';
+window.sendChat=async function(){let text=document.getElementById('chatText').value;if(!text.trim())return;await push(ref(db,'chats'),{name:myUsername,text,time:Date.now()});document.getElementById('chatText').value="";}
 onValue(ref(db,'chats'),snap=>{const obj=snap.val()||{};let chats=Object.values(obj).sort((a,b)=>a.time-b.time);let c=document.getElementById('chatList');c.innerHTML=chats.length?chats.slice(-100).map(m=>`<div class="msg"><b>${m.name}:</b> ${m.text}</div>`).join(''):`<div style="text-align:center;color:#5a617a;padding:30px">مفيش رسائل</div>`;c.scrollTop=c.scrollHeight;});
-window.sendFriendReq=async function(){let my=document.getElementById('myName').value.trim();let to=document.getElementById('friendSearch').value.trim();if(!my||!to)return alert('اكتب اسمك واسم صاحبك');if(my===to)return alert('مينفعش تبعت لنفسك');await push(ref(db,'friendRequests'),{from:my,to:to,status:'pending',time:Date.now()});alert('بعت طلب لـ '+to+' ✅');document.getElementById('friendSearch').value='';localStorage.setItem('myName',my);}
-document.getElementById('myName').value=localStorage.getItem('myName')||'';
-onValue(ref(db,'friendRequests'),snap=>{const obj=snap.val()||{};let all=Object.entries(obj).map(([id,v])=>({...v,_id:id}));let my=localStorage.getItem('myName')||document.getElementById('myName').value;let mine=all.filter(r=>r.to===my||r.from===my).reverse();let div=document.getElementById('friendsResult');if(!my){div.innerHTML='<div style="color:#5a617a">اكتب اسمك فوق عشان تشوف طلباتك</div>';return}if(!mine.length){div.innerHTML='<div style="color:#5a617a;text-align:center">مفيش طلبات لسه</div>';return}div.innerHTML='<h4>📩 طلباتك:</h4>'+mine.map(r=>`<div class="card"><span>${r.from} ➜ ${r.to} ${r.status==='pending'?'⏳ انتظار':'✅ مقبول'}</span><div><button class="btn" onclick="acceptFriend('${r._id}')">قبول</button><button class="btn-del" onclick="deleteFriend('${r._id}')">حذف</button></div></div>`).join('');});
+let allRequests=[];
+window.sendFriendReq=async function(){
+ let to=document.getElementById('friendSearch').value.trim().toLowerCase();
+ if(!to)return alert('اكتب اسم صاحبك');
+ if(to===myUsername)return alert('مينفعش تبعت لنفسك');
+ const userExist = await get(ref(db,'usernames/'+to));
+ if(!userExist.exists()){alert('اليوزر ده مش موجود ❌');return}
+ let already = allRequests.find(r=>r.from===myUsername && r.to===to);
+ if(already){alert('انت باعتله قبل كده ⏳');return}
+ await push(ref(db,'friendRequests'),{from:myUsername,to:to,status:'pending',time:Date.now()});
+ alert('تم ارسال طلب صداقة لـ '+to+' ✅');
+ document.getElementById('friendSearch').value='';
+}
+window.showFriendsTab=function(t){currentFriendTab=t;renderFriends();}
+function renderFriends(){
+ let div=document.getElementById('friendsResult');
+ if(currentFriendTab==='in'){
+   let incoming = allRequests.filter(r=>r.to===myUsername);
+   if(!incoming.length){div.innerHTML='<div style="text-align:center;color:#5a617a">📩 مفيش طلبات جايلك</div>';return}
+   div.innerHTML='<h4>📩 طلبات جايلك:</h4>'+incoming.map(r=>`<div class="card"><span>👤 ${r.from} بعتلك طلب ${r.status==='pending'?'⏳':'✅ مقبول'}</span><div><button class="btn" onclick="acceptFriend('${r._id}')">قبول</button><button class="btn-del" onclick="deleteFriend('${r._id}')">رفض</button></div></div>`).join('');
+ } else {
+   let out = allRequests.filter(r=>r.from===myUsername);
+   if(!out.length){div.innerHTML='<div style="text-align:center;color:#5a617a">📤 مبعتش طلبات لسه</div>';return}
+   div.innerHTML='<h4>📤 طلبات انت بعتها:</h4>'+out.map(r=>`<div class="card"><span>انت ➜ ${r.to} ${r.status==='pending'?'⏳ تم الارسال - مستني موافقة':'✅ مقبول'}</span><div><button class="btn-del" onclick="deleteFriend('${r._id}')">الغاء</button></div></div>`).join('');
+ }
+}
+onValue(ref(db,'friendRequests'),snap=>{
+ const obj=snap.val()||{};
+ allRequests=Object.entries(obj).map(([id,v])=>({...v,_id:id}));
+ renderFriends();
+});
 window.acceptFriend=async function(id){await set(ref(db,'friendRequests/'+id+'/status'),'accepted');}
 window.deleteFriend=async function(id){await remove(ref(db,'friendRequests/'+id));}
 </script>
