@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>يلا نلعب - 90 لعبة</title>
+<style>
+*{box-sizing:border-box;font-family:'Cairo',Tahoma}
+body{margin:0;background:#0f1219;color:#fff}
+header{background:#1a1f2e;padding:15px;text-align:center;border-bottom:2px solid #5865F2}
+.page{max-width:800px;margin:auto;padding:15px}
+.btn{background:#5865F2;color:#fff;border:none;padding:12px 18px;border-radius:10px;font-weight:bold;cursor:pointer;width:100%}
+.card{background:#1e2538;border-radius:14px;padding:12px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+.tag{background:#2a324d;padding:4px 10px;border-radius:20px;font-size:12px}
+input,select,textarea{width:100%;padding:12px;margin:8px 0;border-radius:10px;border:none;background:#2a324d;color:#fff}
+#loginScreen{position:fixed;inset:0;background:#0f1219;z-index:999;display:flex;align-items:center;justify-content:center}
+.loginBox{background:#1e2538;padding:25px;border-radius:16px;width:90%;max-width:350px;text-align:center}
+.chatBox{margin-top:15px;background:#161a27;padding:10px;border-radius:12px}
+.chatMsgs{height:200px;overflow:auto;background:#0f1219;padding:10px;border-radius:8px;display:flex;flex-direction:column;gap:6px}
+.msg{background:#2a324d;padding:6px 10px;border-radius:8px;font-size:13px}
+</style>
+</head>
+<body>
+<div id="loginScreen">
+<div class="loginBox">
+<h2>🎮 اهلا بيك</h2>
+<p style="color:#aaa">سجل اسمك عشان تدخل</p>
+<input id="usernameInput" placeholder="يوزر نيم... ahmed_gamer">
+<button class="btn" onclick="register()">دخول</button>
+</div>
+</div>
+
+<header><div>🎮 يلا نلعب - <span id="myName"></span></div></header>
+<div class="page">
+<div style="background:#1e2538;padding:12px;border-radius:12px;margin-bottom:15px">
+<h4 style="margin:0 0 8px 0">👥 ابحث عن لاعب وابعتله طلب مراسلة</h4>
+<input id="userSearch" oninput="searchUsers()" placeholder="اكتب يوزر نيم...">
+<div id="usersList"></div>
+<div id="myRequests" style="margin-top:10px"></div>
+</div>
+
+<input id="search" oninput="render()" placeholder="🔍 ابحث عن لعبة..." style="background:#1e2538;border:1px solid #333">
+<button class="btn" style="margin:10px 0" onclick="showCreate()">+ اعمل روم</button>
+<div id="roomsList"></div>
+
+<div id="createBox" style="display:none;background:#1e2538;padding:15px;border-radius:14px">
+<select id="game"></select>
+<input id="need" type="number" placeholder="عايز كام واحد؟">
+<textarea id="desc" placeholder="بتعمل ايه؟"></textarea>
+<input id="link" placeholder="لينك الروم">
+<button class="btn" onclick="createRoom()">نشر</button>
+</div>
+
+<div id="roomPage" style="display:none;background:#1e2538;padding:15px;border-radius:14px;margin-top:15px">
+<button onclick="backHome()" style="background:none;border:none;color:#aaa">← رجوع</button>
+<h3 id="rGame"></h3><p id="rDesc"></p>
+<a id="rLink" target="_blank"><button class="btn">🚀 انضم</button></a>
+<div class="chatBox"><div id="chatMsgs" class="chatMsgs"></div><div style="display:flex;gap:5px;margin-top:8px"><input id="chatText" placeholder="رسالة..." onkeypress="if(event.key==='Enter')sendMsg()"><button class="btn" style="width:80px" onclick="sendMsg()">ارسال</button></div></div>
+</div>
+</div>
+<script>
+const GAMES = ["Blood Strike","فري فاير","Free Fire MAX","ببجي موبايل","ببجي لايت","ببجي نيو ستيت","ببجي ستيم","فورتنايت","كول اوف ديوتي موبايل","كول اوف ديوتي وارزون","وارزون موبايل","فالورانت","ليج اوف ليجندز","Wild Rift","روبلوكس","ماين كرافت","ماين كرافت بد وارز","جتا 5 اونلاين","اي فوتبول 26","فيفا 26","اوفر واتش 2","ابيكس ليجندز","ابيكس موبايل","رينبو 6 سيج","موبايل ليجندز","كلاش اوف كلانس","كلاش رويال","ببجي موبايل KR","فار لايت 84","ستاندوف 2","كريتيكال اوبس","دومينو","لودو","لودو كينج","امونج اس","هاي داي","بابجي الهندية","Stumble Guys","Fall Guys","Rocket League","Rocket League Sideswipe","eFootball Mobile","Dream League Soccer","EA FC Mobile","8 Ball Pool","CarX Drift","CarX Street","Asphalt 9","Asphalt 8","Hill Climb Racing 2","Brawl Stars","Brawlhalla","Clash Mini","Hay Day Pop","Subway Surfers VS","Minecraft Trial","Blockman Go","Mini Militia","Free Fire Lite","Modern Combat 5","Modern Combat Versus","Shadow Fight 4 Arena","Shadow Fight 3","PUBG Mobile Lite","Creative Destruction","Cyber Hunter","Knives Out","Rules of Survival","Zula Mobile","Warface GO","World of Tanks Blitz","World of Warships Blitz","Call of Duty: Heroes","Fortnite Mobile","Garena Speed Drifters","KartRider Rush","League of Legends","Arena of Valor","Onmyoji Arena","Pokemon Unite","Pokemon GO","Clash of Lords","Lords Mobile","State of Survival","Last Day on Earth","Free Fire India","Blood Strike MENA","Delta Force Mobile","Arena Breakout","Warzone Mobile","Farlight 84","Undawn","LifeAfter"];
+let sel=document.getElementById('game'); GAMES.forEach(g=>{let o=document.createElement('option');o.textContent=g;sel.appendChild(o)});
+let currentUser = JSON.parse(localStorage.getItem('myUser')||'null');
+let allUsers = JSON.parse(localStorage.getItem('allUsers')||'[]');
+let rooms = JSON.parse(localStorage.getItem('rooms')||'[]');
+let requests = JSON.parse(localStorage.getItem('requests')||'[]');
+let currentRoom = null;
+function checkLogin(){ if(currentUser){ document.getElementById('loginScreen').style.display='none'; document.getElementById('myName').innerText=currentUser; } }
+checkLogin();
+function register(){
+ let name = document.getElementById('usernameInput').value.trim();
+ if(name.length<3) return alert('الاسم قصير');
+ if(!allUsers.includes(name)){ allUsers.push(name); localStorage.setItem('allUsers', JSON.stringify(allUsers)); }
+ currentUser=name; localStorage.setItem('myUser', JSON.stringify(currentUser)); checkLogin(); render(); loadRequests();
+}
+function searchUsers(){
+ let q=document.getElementById('userSearch').value.toLowerCase();
+ let list=document.getElementById('usersList'); list.innerHTML=''; if(!q) return;
+ allUsers.filter(u=>u.toLowerCase().includes(q) && u!=currentUser).forEach(u=>{
+  list.innerHTML+=`<div class="card"><span>@${u}</span><button class="btn" style="width:auto;padding:6px 12px" onclick="sendReq('${u}')">📩 طلب مراسلة</button></div>`;
+ });
+}
+function sendReq(to){ requests.push({from:currentUser,to:to}); localStorage.setItem('requests', JSON.stringify(requests)); alert('بعت طلب لـ @'+to); loadRequests(); }
+function loadRequests(){
+ let myReqs = requests.filter(r=>r.to==currentUser);
+ let box=document.getElementById('myRequests');
+ if(myReqs.length==0){box.innerHTML='<p style="color:#666;font-size:13px">مفيش طلبات مراسلة</p>'; return;}
+ box.innerHTML='<h5>📩 طلبات جاتلك:</h5>';
+ myReqs.forEach(r=>{ box.innerHTML+=`<div class="card"><span>@${r.from} عايز يكلمك</span><button class="btn" style="width:auto" onclick="acceptReq('${r.from}')">قبول</button></div>`; });
+}
+function acceptReq(from){ alert('قبلت @'+from); requests = requests.filter(r=>!(r.from==from && r.to==currentUser)); localStorage.setItem('requests', JSON.stringify(requests)); loadRequests(); }
+function render(){
+ let q=document.getElementById('search').value.toLowerCase();
+ let list=document.getElementById('roomsList'); list.innerHTML='';
+ rooms.filter(r=>r.game.toLowerCase().includes(q)||r.desc.toLowerCase().includes(q)).reverse().forEach(r=>{
+  let idx = rooms.indexOf(r);
+  list.innerHTML+=`<div class="card"><div><span class="tag">${r.game}</span><h4 style="margin:5px 0">${r.name} - ${r.need}</h4><p style="color:#aaa;font-size:12px">${r.desc}</p></div><button class="btn" style="width:auto" onclick="openRoom(${idx})">دخول</button></div>`;
+ });
+}
+function showCreate(){let b=document.getElementById('createBox');b.style.display=b.style.display=='none'?'block':'none'}
+function createRoom(){
+ let r={name:currentUser,game:document.getElementById('game').value,need:document.getElementById('need').value,desc:document.getElementById('desc').value,link:document.getElementById('link').value};
+ if(!r.link) return alert('حط اللينك'); rooms.push(r); localStorage.setItem('rooms',JSON.stringify(rooms)); render(); showCreate();
+}
+function openRoom(i){ currentRoom=i; let r=rooms[i]; document.getElementById('roomPage').style.display='block'; document.getElementById('rGame').innerText=r.game+' - '+r.name; document.getElementById('rDesc').innerText=r.desc; document.getElementById('rLink').href=r.link; loadChat(); }
+function backHome(){document.getElementById('roomPage').style.display='none'}
+function loadChat(){ let msgs=JSON.parse(localStorage.getItem('chat_'+currentRoom)||'[]'); let box=document.getElementById('chatMsgs'); box.innerHTML=''; msgs.forEach(m=>{box.innerHTML+=`<div class="msg"><b>${m.u}:</b> ${m.t}</div>`}); }
+function sendMsg(){ let t=document.getElementById('chatText').value; if(!t) return; let msgs=JSON.parse(localStorage.getItem('chat_'+currentRoom)||'[]'); msgs.push({u:currentUser,t:t}); localStorage.setItem('chat_'+currentRoom, JSON.stringify(msgs)); document.getElementById('chatText').value=''; loadChat(); }
+render(); loadRequests();
+</script>
+</body>
+  </html>
