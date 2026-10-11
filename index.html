@@ -3,73 +3,43 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>يلا نلعب - 150 لعبة حرب وشوتنج + شات خاص</title>
+<title>يلا نلعب - مكتبة الحرب</title>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#0f0f0f;color:#fff;font-family:Tahoma}
-header{padding:15px;background:#1a1a1a;text-align:center;font-size:22px;font-weight:bold;color:#00ff88}
-.tabs{display:flex;background:#1a1a1a;position:sticky;top:0;z-index:10}
-.tabs button{flex:1;padding:12px;border:none;background:#1a1a1a;color:#aaa;cursor:pointer}
-.tabs button.active{background:#222;color:#00ff88;border-bottom:2px solid #00ff88}
-.tab{display:none;padding:10px}.tab.active{display:block}
-input,select{width:100%;padding:10px;border-radius:8px;border:none;background:#222;color:#fff;margin:8px 0}
-.card{background:#1e1e1e;padding:10px;border-radius:10px;margin:8px 0;display:flex;justify-content:space-between;align-items:center}
-.btn{padding:7px 14px;border:none;border-radius:6px;cursor:pointer;font-weight:bold}
-.green{background:#00d084;color:#000}.red{background:#ff4444;color:#fff}
-.msg{padding:6px 10px;margin:4px 0;border-radius:8px;max-width:80%}.me{background:#00d084;color:#000;margin-left:auto}.other{background:#333}
-#privateBox{position:fixed;bottom:0;left:0;right:0;background:#1a1a1a;padding:10px;display:none;flex-direction:column;height:65vh;z-index:100;border-top:2px solid #00ff88}
-.support-bar{display:block;background:#25D366;color:#fff;text-align:center;padding:12px;margin:10px;border-radius:10px;text-decoration:none;font-weight:bold;font-size:16px}
-.float-support{position:fixed;bottom:15px;left:15px;background:#25D366;color:#fff;width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:30px;text-decoration:none;z-index:9999;box-shadow:0 4px 15px rgba(0,0,0,0.6)}
+body { background:#111; color:#fff; font-family:sans-serif; margin:0; }
+.header { color:#00ff88; text-align:center; padding:15px; font-size:22px; font-weight:bold; }
+.support { background:#00ff88; color:#111; text-align:center; padding:12px; margin:15px; border-radius:12px; font-weight:bold; }
+.tabs { display:flex; justify-content:space-around; background:#1a1a1a; padding:10px; }
+.tabs span { color:#888; } .tabs .active { color:#00ff88; border-bottom:2px solid #00ff88; padding-bottom:5px; }
+.search { background:#222; margin:15px; padding:12px; border-radius:12px; }
+.search input { width:100%; background:transparent; border:none; color:#fff; outline:none; text-align:right; }
+.game { background:#1e1e1e; margin:10px 15px; padding:12px; border-radius:12px; display:flex; justify-content:space-between; align-items:center; }
+.btn { background:#00ff88; color:#111; padding:8px 18px; border-radius:8px; font-weight:bold; border:none; cursor:pointer; }
+.footer { text-align:center; padding:25px; margin-top:20px; background:#1a1a1a; }
+.footer a { color:#00ff88; margin:0 10px; text-decoration:none; }
 </style>
 </head>
 <body>
-<header>🎮 يلا نلعب - مكتبة الحرب</header>
-
-<a href="https://wa.me/9779762956184?text=السلام%20عليكم%20احتاج%20دعم%20في%20موقع%20يلا%20نلعب%20🎮" target="_blank" class="support-bar">📞 الدعم - تواصل مع الدعم</a>
-
+<div class="header">🎮 يلا نلعب - مكتبة الحرب</div>
+<div class="support">📞 الدعم - تواصل مع الدعم</div>
 <div class="tabs">
-<button class="active" onclick="openTab(event,'games')">الالعاب</button>
-<button onclick="openTab(event,'rooms')">الغرف</button>
-<button onclick="openTab(event,'chat')">الشات العام</button>
-<button onclick="openTab(event,'friends')">الاصدقاء 🔍</button>
+<span>🔍 الاصدقاء</span><span>الشات العام</span><span>الغرف</span><span class="active">الالعاب</span>
 </div>
+<div class="search"><input placeholder="ابحث عن لعبة... مثلا Blood Strike"></div>
 
-<div id="games" class="tab active"><input id="gameSearch" placeholder="ابحث عن لعبة... مثلا Blood Strike"><div id="gamesList"></div></div>
-<div id="rooms" class="tab"><input id="roomName" placeholder="اسم الغرفة"><select id="gameSelect"></select><button class="btn green" onclick="createRoom()">انشاء غرفة +</button><div id="roomsList"></div></div>
-<div id="chat" class="tab"><div id="publicChat" style="height:50vh;overflow-y:auto;background:#161616;padding:8px;border-radius:8px"></div><div style="display:flex;gap:5px"><input id="chatInput" placeholder="اكتب رسالة..."><button class="btn green" onclick="sendPublic()">ارسال</button></div></div>
-<div id="friends" class="tab"><h3>🔍 بحث عن اصدقاء</h3><input id="searchFriends" placeholder="اكتب اسم صاحبك وهيظهر..."><div id="searchResults"></div><h3 style="margin-top:20px">📩 طلبات المراسلة الخاصة</h3><div id="requestsList"></div></div>
+<div class="game"><button class="btn">العب</button><span>Blood Strike</span></div>
+<div class="game"><button class="btn">العب</button><span>PUBG Mobile</span></div>
+<div class="game"><button class="btn">العب</button><span>PUBG New State</span></div>
+<div class="game"><button class="btn">العب</button><span>Free Fire</span></div>
+<div class="game"><button class="btn">العب</button><span>Free Fire MAX</span></div>
+<div class="game"><button class="btn">العب</button><span>Call of Duty Mobile</span></div>
+<div class="game"><button class="btn">العب</button><span>Warzone Mobile</span></div>
 
-<div id="privateBox"><div style="display:flex;justify-content:space-between"><b id="chatWith">شات خاص</b><button class="btn red" onclick="closePrivate()">X</button></div><div id="privateMessages" style="flex:1;overflow-y:auto;margin:10px 0"></div><div style="display:flex;gap:5px"><input id="privateInput" placeholder="رسالة خاصة..."><button class="btn green" onclick="sendPrivate()">ارسال</button></div></div>
-
-<a href="https://wa.me/9779762956184?text=السلام%20عليكم%20احتاج%20دعم%20في%20موقع%20يلا%20نلعب%20🎮" target="_blank" class="float-support">💬</a>
-
-<script>
-let currentUser=localStorage.getItem('yalla_user')||prompt('اكتب اسمك:');localStorage.setItem('yalla_user',currentUser);let users=JSON.parse(localStorage.getItem('yalla_users')||'[]');if(!users.includes(currentUser)){users.push(currentUser);localStorage.setItem('yalla_users',JSON.stringify(users));}
-
-const games=["Blood Strike","PUBG Mobile","PUBG New State","Free Fire","Free Fire MAX","Call of Duty Mobile","Warzone Mobile","Fortnite","Apex Legends Mobile","Farlight 84","Knives Out","Rules of Survival","Cyber Hunter","ScarFall","Battle Prime","Modern Combat 5","Modern Combat Versus","Shadowgun Legends","Shadowgun WarGames","Critical Ops","Standoff 2","Special Forces Group 2","Forward Assault","MaskGun","Infinity Ops","Bullet Force","Modern Strike Online","World War Heroes","War Robots","Mech Arena","Guns of Boom","Pixel Gun 3D","Block Strike","Counter Attack Multiplayer","Critical Strike CS","Cover Fire","Sniper 3D","Sniper Fury","Hitman Sniper","Overkill 3","Dead Trigger 2","NOVA Legacy","Warface GO","Battlefield Mobile","Rainbow Six Mobile","Valorant Mobile","Overwatch Mobile","Destiny Rising","Halo Mobile","Gears POP","CrossFire Legends","Point Blank Mobile","Zula Mobile","Black Squad M","Combat Master","Tacticool","Arma Mobile Ops","War Thunder Mobile","World of Tanks Blitz","World of Warships Blitz","Modern Warships","Battle Bay","Crisis Action","Creative Destruction","Zooba","Brawl Stars","Bullet Echo","Botworld Adventure","X-Shooter","Doom Eternal Mobile","Wolfenstein","Free Fire OB45","Blood Strike Shutter Island","PUBG Lite","Free Fire India","Indus Battle Royale","Super Mecha Champions","LifeAfter","Rules of Survival 2.0","Cyber Hunter 2","Lost Light","Arena Breakout","Badlanders","Vampire's Fall War","Frag Pro Shooter","Sigma Battle Royale","Omega Strikers Shooter","Zooba Battle","Mini Militia","DooM 4 Mobile","Call of Duty Black Ops","Call of Duty Modern Warfare","Ghosts of War","WW2 Battle Front","World War 2 Heroes","Warpath","Top War","Last Island of Survival","Survival Rules","Blood Rivals","Blood Box","X-Ops","Gun Strike 2","Gunship Battle","Lone Wolf Sniper","Sniper Strike","Sniper Arena","Sniper vs Sniper Online","Hitman Go","Contract Killer Sniper","Killing Floor Mobile","Left to Survive","Into the Dead 2","Zombie Frontier 3","Zombeer","Dead Effect 2","Unkilled","Dead Warfare","Mad Zombies","Mad Guns","Mad GunZ","MadOut2","Pixel Gun Apocalypse","Pixel Gun Warfare","Grand Battle Royale Pixel FPS","Pixel Battle Royale","Cube Wars Battle","XO","Ludo","Domino","Chess","ببجي","Among Us","FIFA","PES","Minecraft","Clash","Uno","طاولة","كوتشينة","شطرنج","ضمنة","سلم وثعبان","بنك الحظ","كيرم","بيلياردو","بولينج","تنس","سلة","قدم","سباق","حرب","ذكاء","الغاز","تحدي","ميموري","بازلز","كلمات","حروف","ارقام","تلوين","رسم","طبخ","تلبيس","سيارات","طيارات","قطارات","مغامرات","اكشن","رعب","مافيا","حرامي","شرطة","بناء","هروب","صيد","قنص","جولف","هوكي","مصارعة","ملاكمة","كاراتيه","نينجا","زومبي","فضاء","قراصنة","مزرعة","مدينة","حيوانات","ديناصورات","روبوت","دراجات","تفحيط","دبابات","سفن","غواصات","منطاد","بيت الرعب","كاندي","فواكه","ليدو","اونو","مونوبولي","سوليتير","شدة","طرنيب","هاند","بلوت","كونكان","استيميشن","بريدج","كوت"];
-
-let rooms=JSON.parse(localStorage.getItem('yalla_rooms')||'[]');let pubChat=JSON.parse(localStorage.getItem('yalla_pubChat')||'[]');let currentPrivateWith=null;
-function openTab(e,id){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');e.target.classList.add('active');if(id==='friends'){renderSearch('');renderRequests();}}
-function renderGames(f=''){document.getElementById('gamesList').innerHTML=games.filter(g=>g.toLowerCase().includes(f.toLowerCase())).map(g=>`<div class="card"><span>${g}</span><button class="btn green" onclick="quickRoom('${g}')">العب</button></div>`).join('');document.getElementById('gameSelect').innerHTML=games.map(g=>`<option>${g}</option>`).join('');}
-function renderRooms(){document.getElementById('roomsList').innerHTML=rooms.map((r,i)=>`<div class="card"><span>🏠 ${r.name} - ${r.game} (${r.owner})</span><button class="btn green" onclick="joinRoom(${i})">دخول</button></div>`).join('')||'<small>مفيش غرف</small>';}
-function createRoom(){let name=document.getElementById('roomName').value||'غرفة '+currentUser;let game=document.getElementById('gameSelect').value;rooms.push({name,game,owner:currentUser});localStorage.setItem('yalla_rooms',JSON.stringify(rooms));renderRooms();}
-function quickRoom(g){document.getElementById('roomName').value=g+' - '+currentUser;document.getElementById('gameSelect').value=g;renderRooms();createRoom();alert('تم انشاء غرفة '+g);}
-function joinRoom(i){alert('دخلت غرفة: '+rooms[i].name);}
-function renderPublic(){document.getElementById('publicChat').innerHTML=pubChat.map(m=>`<div class="msg ${m.from===currentUser?'me':'other'}"><b>${m.from}:</b> ${m.text}</div>`).join('');}
-function sendPublic(){let t=document.getElementById('chatInput').value.trim();if(!t)return;pubChat.push({from:currentUser,text:t});localStorage.setItem('yalla_pubChat',JSON.stringify(pubChat));document.getElementById('chatInput').value='';renderPublic();}
-function renderSearch(q=''){q=q.toLowerCase();let list=users.filter(u=>u!==currentUser&&u.toLowerCase().includes(q));document.getElementById('searchResults').innerHTML=list.map(n=>`<div class="card"><span>👤 ${n}</span><button class="btn green" onclick="sendRequest('${n}')">طلب مراسلة خاص</button></div>`).join('')||'<small>اكتب اسم صديقك وهيظهر هنا</small>';}
-function sendRequest(to){let reqs=JSON.parse(localStorage.getItem('yalla_requests')||'[]');if(reqs.find(r=>r.from===currentUser&&r.to===to&&r.status==='pending'))return alert('بعتله قبل كده');reqs.push({from:currentUser,to:to,status:'pending',time:Date.now()});localStorage.setItem('yalla_requests',JSON.stringify(reqs));alert('✅ تم ارسال طلب خاص لـ '+to);renderRequests();}
-function renderRequests(){let reqs=JSON.parse(localStorage.getItem('yalla_requests')||'[]');let my=reqs.filter(r=>r.to===currentUser&&r.status==='pending');document.getElementById('requestsList').innerHTML=my.map(r=>`<div class="card"><span>طلب من ${r.from}</span><div><button class="btn green" onclick="acceptReq('${r.from}')">قبول</button> <button class="btn red" onclick="rejectReq('${r.from}')">رفض</button></div></div>`).join('')||'<small>مفيش طلبات</small>';}
-function acceptReq(from){let reqs=JSON.parse(localStorage.getItem('yalla_requests')||'[]');let f=reqs.find(r=>r.from===from&&r.to===currentUser);if(f)f.status='accepted';localStorage.setItem('yalla_requests',JSON.stringify(reqs));openPrivate(from);renderRequests();}
-function rejectReq(from){let reqs=JSON.parse(localStorage.getItem('yalla_requests')||'[]');reqs=reqs.filter(r=>!(r.from===from&&r.to===currentUser));localStorage.setItem('yalla_requests',JSON.stringify(reqs));renderRequests();}
-function getChatId(a,b){return [a,b].sort().join('_private_');}
-function openPrivate(withUser){currentPrivateWith=withUser;document.getElementById('privateBox').style.display='flex';document.getElementById('chatWith').innerText='🔒 شات خاص مع '+withUser+' (انتم فقط)';renderPrivate();}
-function closePrivate(){document.getElementById('privateBox').style.display='none';}
-function renderPrivate(){if(!currentPrivateWith)return;let id=getChatId(currentUser,currentPrivateWith);let chats=JSON.parse(localStorage.getItem(id)||'[]');document.getElementById('privateMessages').innerHTML=chats.map(c=>`<div class="msg ${c.from===currentUser?'me':'other'}">${c.text}</div>`).join('');}
-function sendPrivate(){let t=document.getElementById('privateInput').value.trim();if(!t||!currentPrivateWith)return;let id=getChatId(currentUser,currentPrivateWith);let chats=JSON.parse(localStorage.getItem(id)||'[]');chats.push({from:currentUser,text:t});localStorage.setItem(id,JSON.stringify(chats));document.getElementById('privateInput').value='';renderPrivate();}
-document.getElementById('gameSearch').addEventListener('input',e=>renderGames(e.target.value));
-document.getElementById('searchFriends').addEventListener('input',e=>renderSearch(e.target.value));
-renderGames('');renderRooms();renderPublic();renderSearch('');renderRequests();
-setInterval(()=>{renderRequests();},2000);
-</script>
+<!-- ده المهم عشان ادسنس -->
+<div class="footer">
+  <a href="privacy.html">سياسة الخصوصية</a>
+  <a href="contact.html">اتصل بنا</a>
+  <a href="about.html">من نحن</a>
+  <p style="color:#666; font-size:12px; margin-top:15px;">جميع الحقوق محفوظة 2026 - يلا نلعب</p>
+</div>
 </body>
 </html>
