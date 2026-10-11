@@ -2,89 +2,130 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>يلا نلعب - مكتبة الحرب</title>
+<title>seif - يلا نلعب 🎮</title>
 <style>
-*{box-sizing:border-box} body{background:#0f0f0f;color:#fff;font-family:sans-serif;margin:0}
-.top{background:#00ff88;color:#111;text-align:center;padding:14px;font-weight:bold;font-size:18px;border-radius:0 0 14px 14px;margin:0 10px}
-.tabs{display:flex;justify-content:space-between;background:#1a1a1a;padding:10px 5px;margin-top:10px}
-.tabs div{padding:10px;cursor:pointer;color:#888;white-space:nowrap}
-.tabs .active{color:#00ff88;border-bottom:3px solid #00ff88}
-.search{border:2px solid #666;margin:15px;border-radius:14px;padding:12px;background:#111}
-.search input{width:100%;background:transparent;border:none;color:#fff;outline:none;font-size:16px;text-align:right}
-.card{background:#1e1e1e;margin:10px 12px;padding:14px;border-radius:14px;display:flex;justify-content:space-between;align-items:center}
-.btn{background:#00ff88;color:#111;padding:10px 22px;border-radius:10px;border:none;font-weight:bold;font-size:16px;cursor:pointer}
-.btn-del{background:#ff3b3b;color:#fff;border:none;padding:10px 14px;border-radius:10px;margin-right:6px;cursor:pointer}
-.section{display:none}.active-sec{display:block}
-.room{background:#1e1e1e;margin:10px 12px;padding:15px;border-radius:12px;border-right:4px solid #00ff88;display:flex;justify-content:space-between;align-items:center}
-.footer{text-align:center;padding:25px;background:#151515;margin-top:20px}
-.footer a{color:#00ff88;margin:0 8px;text-decoration:none}
+*{box-sizing:border-box} body{background:#0a0e1c;color:#fff;font-family:sans-serif;margin:0}
+.top{background:#151b2e;color:#fff;text-align:center;padding:16px;font-weight:bold;font-size:16px;border-bottom:2px solid #5865f2}
+.tabs{display:flex;justify-content:space-around;background:#151b2e;padding:8px 0;margin:0}
+.tabs div{padding:12px 15px;cursor:pointer;color:#7a8194;border-radius:10px} 
+.tabs .active{color:#fff;background:#222b45;border-bottom:none}
+.searchBox{background:#151b2e;margin:15px;border-radius:14px;padding:4px}
+.searchBox input{width:100%;background:#0f1424;border:1px solid #222b45;color:#fff;outline:none;font-size:15px;padding:14px;border-radius:12px}
+.card{background:#151b2e;margin:10px 12px;padding:14px;border-radius:14px;display:flex;justify-content:space-between;align-items:center;border:1px solid #1e2742}
+.btn{background:#5865f2;color:#fff;padding:10px 22px;border-radius:10px;border:none;font-weight:bold;cursor:pointer}
+.btn-full{background:#5865f2;color:#fff;width:95%;padding:16px;border-radius:14px;border:none;font-weight:bold;font-size:16px;cursor:pointer;margin:10px auto;display:block}
+.btn-del{background:#ff3b5c;color:#fff;border:none;padding:10px 14px;border-radius:10px;cursor:pointer;margin-right:6px}
+.section{display:none} .active-sec{display:block}
+.room{background:#151b2e;margin:12px;padding:15px;border-radius:14px;border:1px solid #1e2742;border-right:4px solid #5865f2}
+.footer{text-align:center;padding:25px;background:#151b2e;margin-top:20px} .footer a{color:#5865f2;margin:0 8px;text-decoration:none}
+.modal{position:fixed;top:0;right:0;left:0;bottom:0;background:rgba(5,8,20,0.85);display:none;align-items:center;justify-content:center;z-index:99}
+.modal.active{display:flex}
+.box{background:#151b2e;padding:20px;border-radius:16px;width:92%;max-width:400px;border:1px solid #222b45}
+.box input, .box select, .box textarea{width:100%;padding:12px;margin:8px 0;background:#0f1424;border:1px solid #222b45;color:#fff;border-radius:10px}
+.chatBox{height:60vh;overflow:auto;padding:10px} .msg{background:#151b2e;margin:6px 12px;padding:10px;border-radius:10px;border:1px solid #1e2742} .msg b{color:#5865f2}
+.chatInput{display:flex;gap:8px;padding:12px;background:#151b2e;position:sticky;bottom:0} .chatInput input{flex:1;padding:12px;background:#0f1424;border:1px solid #222b45;color:#fff;border-radius:10px}
+.friendBox{background:#151b2e;margin:15px;padding:20px;border-radius:14px;border:1px solid #1e2742;text-align:center}
+.friendBox input{width:100%;padding:14px;background:#0f1424;border:1px solid #222b45;color:#fff;border-radius:12px;margin-top:10px}
+.emptyTxt{color:#5a617a;font-size:13px;margin-top:10px}
 </style>
 </head>
 <body>
-<div class="top">📞 الدعم الفني شغال 24 ساعة</div>
+<div class="top">seif - يلا نلعب 🎮</div>
 <div class="tabs">
-<div onclick="openTab('friends')" id="tb-friends">🔍 الاصدقاء</div>
-<div onclick="openTab('chat')" id="tb-chat">الشات العام</div>
-<div onclick="openTab('rooms')" id="tb-rooms">الغرف</div>
+<div onclick="openTab('friends')" id="tb-friends">👥 الاصدقاء</div>
+<div onclick="openTab('chat')" id="tb-chat">دردشة</div>
+<div onclick="openTab('rooms')" id="tb-rooms">الرومات</div>
 <div onclick="openTab('games')" id="tb-games" class="active">الالعاب</div>
 </div>
 
 <div id="sec-games" class="section active-sec">
-<div class="search"><input id="q" onkeyup="doSearch()" placeholder="ابحث عن لعبة..."></div>
+<div class="searchBox"><input id="q" onkeyup="doSearch()" placeholder="ابحث عن لعبة مثلا Blood Strike..."></div>
+<div id="searchRoomsResult"></div>
 <div id="gamesList"></div>
 </div>
 
 <div id="sec-rooms" class="section">
-<div style="padding:15px"><button class="btn" onclick="createRoom()">+ انشاء غرفة جديدة</button></div>
+<div style="padding:10px"><button class="btn-full" onclick="openForm()">+ اعمل روم</button></div>
 <div id="roomsList"></div>
-<div id="joinedMsg"></div>
 </div>
 
-<div id="sec-chat" class="section"><div style="padding:40px;text-align:center;color:#777">الشات العام - قريبا 💬</div></div>
-<div id="sec-friends" class="section"><div style="padding:40px;text-align:center;color:#777">الاصدقاء - ضيف صحابك 👥</div></div>
+<div id="sec-chat" class="section">
+<div id="chatList" class="chatBox"></div>
+<div class="chatInput"><input id="chatName" placeholder="اسمك" style="max-width:85px"><input id="chatText" placeholder="اكتب رسالة..."><button class="btn" onclick="sendChat()">ارسال</button></div>
+</div>
 
-<div class="footer">
-<a href="privacy.html">سياسة الخصوصية</a> | <a href="contact.html">اتصل بنا</a> | <a href="about.html">من نحن</a>
-<p style="color:#555;font-size:12px;margin-top:12px">جميع الحقوق محفوظة 2026</p>
+<div id="sec-friends" class="section">
+<div class="friendBox">
+<div style="font-weight:bold">👥 ابحث عن لاعب وابعته طلب مراسلة</div>
+<input id="friendSearch" placeholder="..." onkeyup="searchFriend()">
+<div class="emptyTxt">مفيش طلبات مراسلة</div>
+<div id="friendsResult" style="margin-top:10px"></div>
+</div>
+<div style="padding:0 15px">
+<div class="searchBox"><input placeholder="roblox" disabled></div>
+</div>
+</div>
+
+<div class="footer"><a href="privacy.html">سياسة الخصوصية</a> | <a href="contact.html">اتصل بنا</a> | <a href="about.html">من نحن</a></div>
+
+<div id="modal" class="modal" onclick="if(event.target==this) closeForm()">
+<div class="box">
+<h3 style="text-align:center;color:#fff">🎮 انشاء روم جديد</h3>
+<label>اسم اللعبة</label><select id="f-game"></select>
+<label>عدد اللاعبين</label><input type="number" id="f-count" placeholder="مثلا 4" min="2" max="12">
+<label>الوصف</label><textarea id="f-desc" placeholder="مثلا: عايز 2 محترفين رانك عالي"></textarea>
+<label>لينك جروب التيم (واتساب / ديسكورد)</label><input type="text" id="f-link" placeholder="https://chat.whatsapp.com/...">
+<div style="display:flex;gap:10px;margin-top:15px"><button class="btn" style="flex:1;padding:14px" onclick="saveRoom()">انشاء ✅</button><button class="btn-del" style="flex:1;padding:14px" onclick="closeForm()">الغاء</button></div>
+</div>
 </div>
 
 <script>
-const allGames=["XO","Ludo","Domino","Chess","ببجي","Free Fire","Among Us","PUBG Mobile","FIFA","Blood Strike","Call of Duty Mobile","PUBG Lite","Free Fire MAX","Warzone Mobile","Fortnite","Apex Legends","Farlight 84","Standoff 2","Critical Ops","Modern Ops","Shadowgun","Pixel Gun 3D","Guns of Boom","Bullet Force","Warface","Dead Trigger 2","Cover Fire","Sniper 3D","Modern Combat 5","NOVA 3","Battle Prime","MaskGun","Infinity Ops","War Robots","Mech Arena","World of Tanks","Brawl Stars","Zooba","T3 Arena","Valorant Mobile","Rainbow Six Mobile","CS Mobile","Knives Out","Cyber Hunter","ScarFall","Hopeless Land","Garena Contra","ZombsRoyale","Lords Mobile","Clash of Clans","Clash Royale","Mobile Legends","Arena of Valor","Wild Rift","Arena Breakout","Lost Light","Undawn","Delta Force Mobile","State of Survival","Last Day on Earth","GTA San","Minecraft","Roblox","8 Ball Pool","Fifa Mobile","eFootball 26","Dream League","Top Eleven","Asphalt 9","Need for Speed","Hill Climb","Subway Surfers","Temple Run","Hay Day","World War Heroes","Gun War","Sniper Strike","Mini Militia","BombSquad","Stick War","Shadow Fight 4","Mortal Kombat","Dragon Ball Legends","BGMI","Blood Strike Mena","Call of Duty Warzone","Ghost Recon","Max Payne","GTA Vice City","Gangstar Vegas","Dead Effect 2","Unkilled","Brothers in Arms 3","Deer Hunter","Hunting Clash","Special Forces Group 2","Soldiers Inc","Frontline Commando","Overkill 3","Blitz Brigade","Six Guns","Mad Bullets","Western Gunfight","Dead Target","Into The Dead 2","Hitman Sniper","Sniper Fury","Modern Combat 4","NOVA Legacy","Tacticool","Warpath","War Thunder Mobile","Brawlhalla","Creative Destruction","Battlelands Royale","FortCraft","Pixel's Unknown","Clash of War","Warlings 2","Stickman Warriors","Shadow Fight 3","Injustice 2","Naruto Storm","One Piece","My Hero Academia","New State Mobile","Black Ops Mobile","Sniper Ghost Warrior","Hitman Blood Money","GTA 3","Bully","Gangstar New Orleans","Respawnables","Guns and Spurs 2","Deer Hunter Classic","Archery King","WW2 Battle Front","Sniper Arena","Major Mayhem 2","Killer Bean","Candy Crush","Ludo King","CarX Drift","Real Cricket","WCC3","Score Hero","Among Us 2","Free Fire India","PUBG KR","CODM Garena","LifeAfter","Eternal Evolution","Doom Eternal Mobile","PUBG Mobile Lite 2","Blood Strike Shutter Island"];
+const allGames=["Blood Strike","PUBG Mobile","Free Fire","Call of Duty Mobile","Fortnite","Valorant Mobile","Minecraft","Roblox","FIFA","eFootball 26","Asphalt 9","8 Ball Pool","Among Us","Brawl Stars","Clash of Clans","Mobile Legends","XO","Ludo","Domino","Chess","Standoff 2","Critical Ops","Farlight 84","War Robots","Mech Arena","World of Tanks","Zooba","T3 Arena","Rainbow Six Mobile","Apex Legends","Free Fire MAX","Warzone Mobile","Delta Force Mobile","Arena Breakout","GTA San","Hay Day","Subway Surfers","Candy Crush","Ludo King","CarX Drift","Shadow Fight 4","Mortal Kombat","Dragon Ball Legends","BGMI","Modern Combat 5","Sniper 3D","Mini Militia","BombSquad","Stick War"];
 while(allGames.length<150){allGames.push("لعبة حرب "+(allGames.length+1))}
 const gl=document.getElementById('gamesList');
-function renderGames(arr){gl.innerHTML="";arr.forEach(g=>{gl.innerHTML+=`<div class="card"><button class="btn" onclick="location.href='game.html?name=${g}'">العب</button><span>${g}</span></div>`})}
+const searchRoomsResult=document.getElementById('searchRoomsResult');
+let rooms = JSON.parse(localStorage.getItem('realRooms') || '[]');
+let sel=document.getElementById('f-game'); allGames.slice(0,60).forEach(g=>{sel.innerHTML+=`<option>${g}</option>`});
+function renderGames(arr){gl.innerHTML=""; arr.forEach(g=>{gl.innerHTML+=`<div class="card"><button class="btn" onclick="showRoomsForGame('${g}')">شوف الرومات</button><span>${g}</span></div>`});}
 renderGames(allGames);
-function doSearch(){let v=document.getElementById('q').value.toLowerCase();renderGames(allGames.filter(x=>x.toLowerCase().includes(v)))}
-function openTab(n){
-document.querySelectorAll('.section').forEach(s=>s.classList.remove('active-sec'));
-document.querySelectorAll('.tabs div').forEach(t=>t.classList.remove('active'));
-document.getElementById('sec-'+n).classList.add('active-sec');
-document.getElementById('tb-'+n).classList.add('active');
-if(n=='rooms') loadRooms();
+function doSearch(){
+let v=document.getElementById('q').value.toLowerCase().trim();
+renderGames(allGames.filter(x=>x.toLowerCase().includes(v)));
+if(v.length>1){
+let filteredRooms = rooms.filter(r=>r.game.toLowerCase().includes(v));
+if(filteredRooms.length>0){
+searchRoomsResult.innerHTML = `<div style="margin:12px;padding:12px;background:#151b2e;border-radius:12px;border:1px solid #1e2742"><h3 style="color:#5865f2">🔥 ${filteredRooms.length} روم لـ "${v}"</h3>` + filteredRooms.map(r=>`
+<div class="room"><div style="display:flex;justify-content:space-between"><b>🎮 ${r.game} - ${r.count} لاعبين</b><div><button class="btn" onclick="joinRoom(${r.id})">دخول</button><button class="btn-del" onclick="deleteRoom(${r.id})">🗑️</button></div></div><p style="color:#8a90a8;font-size:13px">${r.desc||''}</p>${r.link?`<a href="${r.link}" target="_blank" style="color:#5865f2">🔗 لينك التيم</a>`:''}</div>`).join('') + `</div>`;
+} else if(v.length>2){ searchRoomsResult.innerHTML = `<div style="text-align:center;padding:15px;color:#5a617a">مفيش رومات للعبة "${v}" لسه - اعمل انت اول واحد 🔥</div>`; } else { searchRoomsResult.innerHTML=""; }
+} else { searchRoomsResult.innerHTML=""; }
+}
+function showRoomsForGame(gameName){
+openTab('rooms');
+let list=document.getElementById('roomsList');
+let filtered = rooms.filter(r=>r.game.toLowerCase() === gameName.toLowerCase());
+if(filtered.length==0){ list.innerHTML=`<div style="text-align:center;padding:40px;color:#7a8194">مفيش رومات للعبة <b style="color:#5865f2">${gameName}</b> لسه<br><br><button class="btn-full" onclick="openForm()">+ اعمل اول روم لـ ${gameName}</button><button class="btn" style="background:#222b45;color:#fff" onclick="loadRooms()">عرض كل الرومات</button></div>`; }
+else { list.innerHTML=`<div style="margin:10px;padding:10px;background:#5865f2;color:#fff;border-radius:10px;font-weight:bold">🎮 رومات ${gameName} (${filtered.length}) <button onclick="loadRooms()" style="float:left;background:#0f1424;color:#fff;border:none;padding:5px 10px;border-radius:6px">الكل</button></div>` + filtered.map(r=>`<div class="room"><div style="display:flex;justify-content:space-between"><b>🎮 ${r.game} - ${r.count}</b><div><button class="btn" onclick="joinRoom(${r.id})">دخول</button><button class="btn-del" onclick="deleteRoom(${r.id})">🗑️</button></div></div><p style="color:#8a90a8;font-size:13px">${r.desc||''}</p>${r.link?`<a href="${r.link}" target="_blank" style="color:#5865f2">🔗 لينك التيم</a>`:''}</div>`).join(''); }
+}
+function openTab(n){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active-sec'));document.querySelectorAll('.tabs div').forEach(t=>t.classList.remove('active'));document.getElementById('sec-'+n).classList.add('active-sec');document.getElementById('tb-'+n).classList.add('active');if(n=='rooms') loadRooms(); if(n=='chat') loadChat();}
+function openForm(){document.getElementById('modal').classList.add('active');}
+function closeForm(){document.getElementById('modal').classList.remove('active');}
+function saveRoom(){
+let game=document.getElementById('f-game').value, count=document.getElementById('f-count').value||4, desc=document.getElementById('f-desc').value, link=document.getElementById('f-link').value;
+rooms.push({id:Date.now(), game, count, desc, link}); localStorage.setItem('realRooms', JSON.stringify(rooms)); closeForm(); loadRooms(); openTab('rooms');
 }
 function loadRooms(){
-document.getElementById('roomsList').innerHTML=`
-<div class="room" id="room-1"><span>🔥 روم Blood Strike - 9/12</span><div><button class="btn" onclick="joinRoom('Blood Strike')">دخول</button> <button class="btn-del" onclick="deleteRoom(1)">🗑️ حذف</button></div></div>
-<div class="room" id="room-2"><span>⚔️ روم PUBG - 5/10</span><div><button class="btn" onclick="joinRoom('PUBG')">دخول</button> <button class="btn-del" onclick="deleteRoom(2)">🗑️ حذف</button></div></div>
-<div class="room" id="room-3"><span>💥 روم Free Fire</span><div><button class="btn" onclick="joinRoom('Free Fire')">دخول</button> <button class="btn-del" onclick="deleteRoom(3)">🗑️ حذف</button></div></div>`;
+let list=document.getElementById('roomsList');
+if(rooms.length==0){list.innerHTML=`<div style="text-align:center;padding:60px;color:#7a8194">مفيش رومات لسه<br>اعمل انت اول روم 🔥</div>`;return;}
+list.innerHTML=""; rooms.slice().reverse().forEach(r=>{
+list.innerHTML+=`<div class="room"><div style="display:flex;justify-content:space-between"><b>🎮 ${r.game} - ${r.count} لاعبين</b><div><button class="btn" onclick="joinRoom(${r.id})">دخول</button><button class="btn-del" onclick="deleteRoom(${r.id})">🗑️</button></div></div><p style="color:#8a90a8;font-size:13px">${r.desc||''}</p>${r.link?`<a href="${r.link}" target="_blank" style="color:#5865f2">🔗 لينك التيم</a>`:''}</div>`;
+});
 }
-function joinRoom(name){
-let nick=prompt("اسمك عشان تدخل روم "+name+":");
-if(nick){document.getElementById('joinedMsg').innerHTML=`<div style="background:#00ff88;color:#111;padding:12px;margin:12px;border-radius:10px;text-align:center">✅ اهلا ${nick} دخلت روم ${name}</div>`;}
-}
-function createRoom(){
-let name=prompt("اسم الروم الجديد:");
-if(name && name.trim()!=""){
-let id=Date.now();
-document.getElementById('roomsList').innerHTML+=`<div class="room" id="room-${id}"><span>🎮 ${name}</span><div><button class="btn" onclick="joinRoom('${name}')">دخول</button> <button class="btn-del" onclick="deleteRoom(${id})">🗑️ حذف</button></div></div>`;
-}
-}
-function deleteRoom(id){
-if(confirm("متأكد عايز تحذف الروم ده؟")){
-let el=document.getElementById('room-'+id);
-if(el) el.remove();
-}
-}
+function joinRoom(id){let r=rooms.find(x=>x.id==id); if(r&&r.link) window.open(r.link,'_blank'); else alert('دخلت روم '+r.game);}
+function deleteRoom(id){if(confirm('تحذف الروم؟')){rooms=rooms.filter(x=>x.id!=id); localStorage.setItem('realRooms', JSON.stringify(rooms)); loadRooms(); doSearch();}}
+let chats = JSON.parse(localStorage.getItem('chatMsgs') || '[]');
+function loadChat(){let c=document.getElementById('chatList'); c.innerHTML=""; if(chats.length==0) c.innerHTML=`<div style="text-align:center;color:#5a617a;padding:30px">مفيش رسائل لسه</div>`; else chats.forEach(m=>{c.innerHTML+=`<div class="msg"><b>${m.name}:</b> ${m.text}</div>`}); c.scrollTop=c.scrollHeight;}
+function sendChat(){let name=document.getElementById('chatName').value||'مجهول'; let text=document.getElementById('chatText').value; if(!text.trim()) return; chats.push({name,text}); localStorage.setItem('chatMsgs', JSON.stringify(chats)); document.getElementById('chatText').value=""; loadChat();}
+function searchFriend(){let v=document.getElementById('friendSearch').value; if(v) document.getElementById('friendsResult').innerHTML=`<div class="card"><span>🔍 ${v}</span><button class="btn" onclick="alert('بعت طلب لـ ${v}')">ابعت طلب</button></div>`; else document.getElementById('friendsResult').innerHTML="";}
 </script>
 </body>
 </html>
