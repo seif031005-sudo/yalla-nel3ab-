@@ -6,60 +6,13 @@
 <title>𝓢𝓮𝓲𝓯.𝓶𝓸 - تحميل فيديو</title>
 <style>
     * { box-sizing: border-box; }
-  body {
-    background: #E9E2FF; /* بربل خفيف */
-    color: #2D1B4E;
-    font-family: sans-serif;
-    text-align: center;
-    padding: 30px 15px;
-    margin: 0;
-    min-height: 100vh;
-  }
-  .brand {
-    font-size: 42px;
-    margin: 10px 0 5px 0;
-    color: #4B2E83;
-    letter-spacing: 1px;
-  }
-  .sub {
-    font-size: 14px;
-    opacity: .7;
-    margin-bottom: 20px;
-  }
-  .box {
-    background: #FFFFFF;
-    padding: 25px 20px;
-    border-radius: 24px;
-    max-width: 480px;
-    margin: auto;
-    box-shadow: 0 10px 30px rgba(75, 46, 131, 0.15);
-  }
-  .box h2 { margin: 0 0 15px 0; color: #2D1B4E; }
-  input {
-    width: 100%;
-    padding: 15px;
-    border-radius: 14px;
-    border: 2px solid #E9E2FF;
-    background: #F7F4FF;
-    font-size: 16px;
-    direction: ltr;
-    outline: none;
-  }
-  input:focus { border-color: #8B5CF6; }
-  button {
-    width: 100%;
-    padding: 15px;
-    background: #8B5CF6; /* بربل */
-    color: #fff;
-    border: none;
-    border-radius: 14px;
-    font-size: 19px;
-    font-weight: bold;
-    cursor: pointer;
-    margin-top: 12px;
-    box-shadow: 0 5px 15px rgba(139, 92, 246, 0.35);
-  }
-  button:active { transform: scale(0.98); }
+  body { background: #E9E2FF; color: #2D1B4E; font-family: sans-serif; text-align: center; padding: 30px 15px; margin: 0; min-height: 100vh; }
+  .brand { font-size: 42px; margin: 10px 0 5px 0; color: #4B2E83; }
+  .sub { font-size: 14px; opacity: .7; margin-bottom: 20px; }
+  .box { background: #FFFFFF; padding: 25px 20px; border-radius: 24px; max-width: 480px; margin: auto; box-shadow: 0 10px 30px rgba(75,46,131,0.15); }
+  .box h2 { margin: 0 0 15px 0; }
+  input { width: 100%; padding: 15px; border-radius: 14px; border: 2px solid #E9E2FF; background: #F7F4FF; font-size: 16px; direction: ltr; outline: none; }
+  button { width: 100%; padding: 15px; background: #8B5CF6; color: #fff; border: none; border-radius: 14px; font-size: 19px; font-weight: bold; cursor: pointer; margin-top: 12px; }
   #status { margin-top: 15px; font-size: 15px; }
   .platforms { margin-top: 15px; font-size: 13px; opacity: .6; }
   .footer { margin-top: 20px; font-size: 13px; opacity: .6; }
@@ -75,7 +28,7 @@
   <input id="link" placeholder="حط لينك تيك توك / يوتيوب / انستا / تويتر">
   <button onclick="download()">تحميل</button>
   <p id="status"></p>
-  <div class="platforms">TikTok • Instagram • YouTube • Twitter • Telegram</div>
+  <div class="platforms">TikTok • Instagram • YouTube • Twitter</div>
 </div>
 
 <div class="footer">Made by 𝓢𝓮𝓲𝓯.𝓶𝓸 ✨</div>
@@ -88,27 +41,35 @@ async function download(){
   
   status.innerText = 'جارى التحميل... استنى ⏳';
 
-  try{
-    const res = await fetch('https://api.cobalt.tools/api/json', {
-      method: 'POST',
-      headers: {'Content-Type':'application/json', 'Accept':'application/json'},
-      body: JSON.stringify({ url: url })
-    });
-    const data = await res.json();
+  // هنجرب 3 سيرفرات ورا بعض
+  const servers = [
+    'https://api.cobalt.tools/api/json',
+    'https://co.wuk.sh/api/json',
+    'https://cobalt-api.kwiatekmiki.com/api/json'
+  ];
 
-    if(data.url){
-      const a = document.createElement('a');
-      a.href = data.url;
-      a.download = 'video.mp4';
-      a.target = '_blank';
-      a.click();
-      status.innerText = 'تم ✅ لو منزلش دوس على اللينك اللي اتفتح';
-    } else {
-      status.innerText = 'مش عارف احمل الفيديو ده، جرب لينك تاني';
-    }
-  } catch(e){
-    status.innerText = 'في مشكلة، جرب تاني';
+  for(let server of servers){
+    try{
+      const res = await fetch(server, {
+        method: 'POST',
+        headers: {'Content-Type':'application/json', 'Accept':'application/json'},
+        body: JSON.stringify({ url: url })
+      });
+      const data = await res.json();
+      if(data.url){
+        const a = document.createElement('a');
+        a.href = data.url;
+        a.download = 'video.mp4';
+        a.target = '_blank';
+        a.click();
+        status.innerText = 'تم ✅ لو منزلش دوس على اللينك اللي اتفتح';
+        return;
+      }
+    } catch(e){ continue; }
   }
+
+  // لو كله فشل، نفتح موقع بديل جاهز
+  status.innerHTML = 'السيرفرات مشغولة دلوقتي، دوس هنا عشان تحمل من موقع تاني: <br><br><a href="https://ssstik.io/en?url='+encodeURIComponent(url)+'" target="_blank" style="color:#8B5CF6;font-weight:bold">افتح بديل التحميل</a>';
 }
 </script>
 </body>
